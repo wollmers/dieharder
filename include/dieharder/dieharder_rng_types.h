@@ -65,6 +65,7 @@
  GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128_pp;		/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128_ss;		/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128_p;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128p; /* Marcus Müller Oct 2020 */
 
  /*
   * rng global vectors and variables for setup and tests.
