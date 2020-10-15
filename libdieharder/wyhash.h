@@ -1,9 +1,12 @@
-//Author: Wang Yi <godspeed_china@yeah.net>
+/* Copyright 2020 王一 Wang Yi <godspeed_china@yeah.net>
+   This is free and unencumbered software released into the public domain. http://unlicense.org/
+   See github.com/wangyi-fudan/wyhash/ LICENSE
+ */
 #ifndef wyhash_final_version
 #define wyhash_final_version
 //defines that change behavior
 #ifndef WYHASH_CONDOM
-#define WYHASH_CONDOM 1 //0,1,2
+#define WYHASH_CONDOM 1 //0: read 8 bytes before and after boudaries, dangerous but fastest. 1: normal valid behavior 2: extra protection against entropy loss (probability=2^-63), aka. "blind multiplication"
 #endif
 #define WYHASH_32BIT_MUM 0	//faster on 32 bit system
 //includes
@@ -118,6 +121,8 @@ static inline uint64_t wyhash64(uint64_t A, uint64_t B){  A^=_wyp[0]; B^=_wyp[1]
 static inline uint64_t wyrand(uint64_t *seed){  *seed+=_wyp[0]; return _wymix(*seed,*seed^_wyp[1]);}
 static inline double wy2u01(uint64_t r){ const double _wynorm=1.0/(1ull<<52); return (r>>12)*_wynorm;}
 static inline double wy2gau(uint64_t r){ const double _wynorm=1.0/(1ull<<20); return ((r&0x1fffff)+((r>>21)&0x1fffff)+((r>>42)&0x1fffff))*_wynorm-3.0;}
+static inline uint64_t wy2u0k(uint64_t r, uint64_t k){ _wymum(&r,&k); return k; }
+
 static inline void make_secret(uint64_t seed, uint64_t *secret){
   uint8_t c[] = {15, 23, 27, 29, 30, 39, 43, 45, 46, 51, 53, 54, 57, 58, 60, 71, 75, 77, 78, 83, 85, 86, 89, 90, 92, 99, 101, 102, 105, 106, 108, 113, 114, 116, 120, 135, 139, 141, 142, 147, 149, 150, 153, 154, 156, 163, 165, 166, 169, 170, 172, 177, 178, 180, 184, 195, 197, 198, 201, 202, 204, 209, 210, 212, 216, 225, 226, 228, 232, 240 };
   for(size_t i=0;i<5;i++){
@@ -129,7 +134,7 @@ static inline void make_secret(uint64_t seed, uint64_t *secret){
       for(size_t j=0;j<i;j++)
 #if defined(__GNUC__) || defined(__INTEL_COMPILER) || defined(__clang__)
         if(__builtin_popcountll(secret[j]^secret[i])!=32){ ok=0; break; }
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) && defined(_M_X64)
         if(_mm_popcnt_u64(secret[j]^secret[i])!=32){ ok=0; break; }
 #endif
        if(!ok)continue;
