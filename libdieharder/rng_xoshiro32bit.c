@@ -215,11 +215,11 @@ xoroshiro64_s_get_double (void *vstate)
 static void xoshiro32_set (void *vstate, unsigned long int s) {
 
  /* Initialize automaton using specified seed. */
- xoshiro32_state_t *state __attribute__((unused)) = (xoshiro32_state_t *) vstate;
- state->s[0] = random_seed() ^ s;
- state->s[1] = random_seed() ^ rotl(s, 4);
- state->s[2] = random_seed() ^ rotl(s, 8);
- state->s[3] = random_seed() ^ rotl(s, 12);
+ xoshiro32_state_t *state = (xoshiro32_state_t *) vstate;
+ state->s[0] = s;
+ state->s[1] = (s + 1) ^ rotl(s, 8);
+ state->s[2] = (s + 2) ^ rotl(s, 16);
+ state->s[3] = (s + 3) ^ rotl(s, 24);
 }
 
 static const gsl_rng_type xoshiro128_pp_type =
