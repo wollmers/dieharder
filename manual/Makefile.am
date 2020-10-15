@@ -32,7 +32,7 @@ link-sources:
 else
 all:	link-sources $(PDF)
 link-sources:
-	-for s in $(EXTRA_DIST); \
+	-@for s in $(EXTRA_DIST); \
         do \
 	  if [ ! -e $$s ] && [ -e $(srcdir)/$$s ]; then \
 	    ln -s $(srcdir)/$$s; \

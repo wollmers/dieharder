@@ -16,7 +16,7 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 #include <dieharder/libdieharder.h>
 
 static inline uint64_t rotl(const uint64_t x, int k) {
-  return (x << k) | (x >> (32 - k));
+  return (x << k) | (x >> (64 - k));
 }
 
 /*
@@ -127,6 +127,8 @@ xoroshiro128_p_get (void *vstate)
   const uint64_t result = s0 + s1;
 
   s1 ^= s0;
+  //s[0] = rotl(s0, 55) ^ s1 ^ (s1 << 14); // a, b
+  //s[1] = rotl(s1, 36); // c
   s[0] = rotl(s0, 24) ^ s1 ^ (s1 << 16); // a, b
   s[1] = rotl(s1, 37); // c
 
