@@ -9,7 +9,7 @@ AC_PREREQ(2.59)
 # Be sure to set DIEHARDER_LT_VERSION below at the same time
 # you change this:
 #==================================================================
-AC_INIT([dieharder], [3.31.2])
+AC_INIT([dieharder], [3.31.2beta])
 AM_INIT_AUTOMAKE([1.14 foreign dist-xz no-installinfo subdir-objects -Wall])
 AC_CONFIG_SRCDIR([dieharder.pc.in])
 RELEASE=1
