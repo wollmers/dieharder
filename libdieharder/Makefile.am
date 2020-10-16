@@ -116,4 +116,4 @@ DEFINES = -DVERSION=$(VERSION) -DLITTLE_ENDIAN=$(LITTLE_ENDIAN)
 
 # Compile flags (use fairly standard -O3 as default)
 AM_CPPFLAGS = $(DEFINES) -I ${top_srcdir}/include -I ${includedir} -I.
-AM_CFLAGS = -O3 -Wall -pedantic -Wno-unused-variable
+AM_CFLAGS = -O3 -march=native -Wall -pedantic -Wno-unused-variable

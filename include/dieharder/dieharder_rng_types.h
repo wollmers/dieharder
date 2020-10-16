@@ -88,6 +88,6 @@ extern unsigned int dh_num_dieharder_rngs; /* dh rngs available in libdieharder 
 extern unsigned int dh_num_R_rngs;         /* R-derived rngs available in libdieharder */
 extern unsigned int dh_num_hardware_rngs;  /* hardware rngs supported in libdieharder */
 extern unsigned int dh_num_user_rngs;      /* user-added rngs */
-extern unsigned int dh_num_reserved_rngs;  /* ngs added in reserved space by new UI */
+extern unsigned int dh_num_reserved_rngs;  /* rngs added in reserved space by new UI */
 
 extern gsl_rng *rng;                  /* global gsl random number generator */

@@ -93,53 +93,40 @@ void dieharder_rng_types()
   */
  i = 200;
  dh_num_dieharder_rngs = 0;
- ADD(gsl_rng_stdin_input_raw);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_file_input_raw);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_file_input);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_ca);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_uvag);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_aes);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_threefish);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_XOR);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_kiss);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_superkiss);
- dh_num_dieharder_rngs++;
 
- ADD(gsl_rng_wyrand);
- dh_num_dieharder_rngs++;
+#define ADD_RNG(x) \
+ ADD(gsl_rng_##x); \
+ dh_num_dieharder_rngs++
+ 
+ ADD_RNG (stdin_input_raw);
+ ADD_RNG (file_input_raw);
+ ADD_RNG (file_input);
+ ADD_RNG (ca);
+ ADD_RNG (uvag);
+ ADD_RNG (aes);
+ ADD_RNG (threefish);
+ ADD_RNG (XOR);
+ ADD_RNG (kiss);
+ ADD_RNG (superkiss);
+
+ ADD_RNG (wyrand);
  // 32bit
- ADD(gsl_rng_xoshiro128_pp);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoshiro128_ss);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoshiro128_p);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoroshiro64_ss);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoroshiro64_s);
- dh_num_dieharder_rngs++;
+ ADD_RNG (xoshiro128_pp);
+ ADD_RNG (xoshiro128_ss);
+ ADD_RNG (xoshiro128_p);
+ ADD_RNG (xoroshiro64_ss);
+ ADD_RNG (xoroshiro64_s);
  // 64bit
- ADD(gsl_rng_xoshiro256_pp);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoshiro256_ss);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoshiro256_p);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoroshiro128_pp);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoroshiro128_ss);
- dh_num_dieharder_rngs++;
- ADD(gsl_rng_xoroshiro128_p);
- dh_num_dieharder_rngs++;
+ ADD_RNG (xoshiro256_pp);
+ ADD_RNG (xoshiro256_ss);
+ ADD_RNG (xoshiro256_p);
+ ADD_RNG (xoroshiro128_pp);
+ ADD_RNG (xoroshiro128_ss);
+ ADD_RNG (xoroshiro128_p);
+
+ //ADD_RNG (jsf);
+ //ADD_RNG (jsf64);
+
  MYDEBUG(D_TYPES){
    printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
  }
@@ -151,18 +138,19 @@ void dieharder_rng_types()
   */
  i = 400;
  dh_num_R_rngs = 0;
- ADD(gsl_rng_r_wichmann_hill);
- dh_num_R_rngs++;
- ADD(gsl_rng_r_marsaglia_mc);
- dh_num_R_rngs++;
- ADD(gsl_rng_r_super_duper);
- dh_num_R_rngs++;
- ADD(gsl_rng_r_mersenne_twister);
- dh_num_R_rngs++;
- ADD(gsl_rng_r_knuth_taocp);
- dh_num_R_rngs++;
- ADD(gsl_rng_r_knuth_taocp2);
- dh_num_R_rngs++;
+
+#undef ADD_RNG
+#define ADD_RNG(x) \
+ ADD(gsl_rng_##x); \
+ dh_num_R_rngs++
+
+ ADD_RNG (r_wichmann_hill);
+ ADD_RNG (r_marsaglia_mc);
+ ADD_RNG (r_super_duper);
+ ADD_RNG (r_mersenne_twister);
+ ADD_RNG (r_knuth_taocp);
+ ADD_RNG (r_knuth_taocp2);
+
  MYDEBUG(D_TYPES){
    printf("# startup:  Found %u R rngs.\n",dh_num_R_rngs);
  }
