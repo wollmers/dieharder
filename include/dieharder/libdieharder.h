@@ -73,7 +73,7 @@ typedef unsigned int            uint;
 
 // cygwin newlib
 #ifndef M_PI
-  #define M_PI 3.14159265358979323846
+  #define M_PI  PI
 #endif
 /*
  * For reasons unknown and unknowable, free() doesn't null the pointer

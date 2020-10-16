@@ -65,6 +65,30 @@
  GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128_pp;		/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128_ss;		/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128_p;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_jsf;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_jsf64;			/* rurban Oct 2020 */
+
+/* TODO: (see https://bashtage.github.io/randomgen/new-or-different.html)
+AES Counter (compare to rng_aes)
+ChaCha
+DSFMT
+EFIIX64
+HC128
+JSF (done)
+LXM
+MT64
+PCG32
+PCG64
+PCG64 2.0 (64-bit multiplier, DXSM mixing) "cm-dxsm"
+LCG128Mix (128-bit LCG with output mixing)
+Philox
+RDRAND
+Romu
+SFC64
+SFMT
+SPECK128
+ThreeFry
+*/
 
  /*
   * rng global vectors and variables for setup and tests.

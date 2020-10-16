@@ -124,8 +124,8 @@ void dieharder_rng_types()
  ADD_RNG (xoroshiro128_ss);
  ADD_RNG (xoroshiro128_p);
 
- //ADD_RNG (jsf);
- //ADD_RNG (jsf64);
+ ADD_RNG (jsf);
+ ADD_RNG (jsf64);
 
  MYDEBUG(D_TYPES){
    printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
@@ -157,10 +157,9 @@ void dieharder_rng_types()
 
  /*
   * These are hardware/system generators.  Again, it would be lovely to
-  * merge them with the GSL permanently.  It would also be good to wrap
-  * these in conditionals so that they are added iff the hardware
-  * interface exists.  Perhaps we should try doing this -- it requires a
-  * call to stat, I believe.  But not now.
+  * merge them with the GSL permanently.  They are wrapped
+  * in conditionals so that they are only added iff the hardware
+  * interface exists.
   */
  i = 500;
  dh_num_hardware_rngs = 0;
