@@ -82,5 +82,5 @@ check: $(PROGRAMS)
 	         100 101 102 202 203 204 205 206 207 208 209; \
         do \
 	  echo dieharder -d $$d ; \
-	  ./dieharder$(EXEEXT) -d $$d ; \
+	  ${top_builddir}/libtool --mode=execute ./dieharder -d $$d ; \
 	done
