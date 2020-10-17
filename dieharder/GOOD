@@ -1,0 +1,11 @@
+# no FAILED, 1 WEAK
+wyrand_g210_a.out:1
+xoroshiro128+_g221_a.out:1
+xoroshiro128ss_g220_a.out:1
+xoroshiro64s_g215_a.out:1
+xoshiro128ss_g212_a.out:1
+mt19937_g013_a.out:1
+ca_g203_a.out:1
+mt19937_1998_g015_a.out:1
+R_mersenne_twister_g403_a.out:1
+ranlux389_g044_a.out:1

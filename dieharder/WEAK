@@ -1,0 +1,15 @@
+# no FAILED, >1 WEAK
+pcg64_g225_a.out:2
+taus2_g053_a.out:2
+taus_g052_a.out:2
+kiss_g208_a.out:2
+Threefish_OFB_g206_a.out:2
+ranlxd2_g046_a.out:2
+tt800_g056_a.out:3
+uvag_g204_a.out:3
+mt19937_1999_g014_a.out:3
+R_wichmann_hill_g400_a.out:3
+AES_OFB_g205_a.out:3
+ranlxd1_g045_a.out:3
+jsf_g222_a.out:4
+pcg32_g224_a.out:5

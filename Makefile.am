@@ -5,7 +5,7 @@ SUBDIRS = libdieharder dieharder include
 if HAVE_LATEX
 SUBDIRS += manual
 endif
-EXTRA_DIST = autogen.sh Copyright dieharder.abs
+EXTRA_DIST = autogen.sh Copyright dieharder.abs QUALITY.md
 
 ACLOCAL_AMFLAGS = -I m4 
 #========================================================================
