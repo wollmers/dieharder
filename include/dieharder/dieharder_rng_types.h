@@ -67,6 +67,12 @@
  GSL_VAR const gsl_rng_type *gsl_rng_xoroshiro128_p;		/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_jsf;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_jsf64;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_pcg32;			/* rurban Oct 2020 */
+#if defined(__SIZEOF_INT128__)
+ GSL_VAR const gsl_rng_type *gsl_rng_pcg64;			/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_pcg64_dxsm;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_pcg64_cmdxsm;	       	/* rurban Oct 2020 */
+#endif
 
 /* TODO: (see https://bashtage.github.io/randomgen/new-or-different.html)
 AES Counter (compare to rng_aes)
@@ -77,10 +83,10 @@ HC128
 JSF (done)
 LXM
 MT64
-PCG32
-PCG64
+PCG32 (done)
+PCG64 (XSL-RR 1.0) (done)
 PCG64 2.0 (64-bit multiplier, DXSM mixing) "cm-dxsm"
-LCG128Mix (128-bit LCG with output mixing)
+LCG128Mix (128-bit LCG with output mixing) "dxsm"
 Philox
 RDRAND
 Romu

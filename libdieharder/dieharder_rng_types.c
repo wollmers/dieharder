@@ -126,6 +126,12 @@ void dieharder_rng_types()
 
  ADD_RNG (jsf);
  ADD_RNG (jsf64);
+ ADD_RNG (pcg32);
+#ifdef __SIZEOF_INT128__
+ ADD_RNG (pcg64);
+ //ADD_RNG (pcg64_dxsm);
+ //ADD_RNG (pcg64_cmdxsm);
+#endif
 
  MYDEBUG(D_TYPES){
    printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
