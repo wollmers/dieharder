@@ -164,6 +164,45 @@ int select_rng(int gennum,
      return(-1);
    }
  }
+ /*
+  * We want to fill in the XOR names.
+  */
+ if(strncmp("XOR",dh_rng_types[gennum]->name,10) == 0){
+   if(gvcount < 2){
+     fprintf(stderr,"Error: Not enough -g generators given for XOR. Need at least 2");
+     return(-1);
+   }
+   if(gvcount == 2){
+     // set the first to the default. this way we only need to add one more -g <rng>.
+     gnumbs[2] = gnumbs[1];
+     gnumbs[1] = 13;
+     gvcount = 3;
+   }
+   if(gvcount >= 2){
+     // extend the name
+     char tmpname[1024];
+     strcpy (tmpname, dh_rng_types[gennum]->name);
+     strncat (tmpname, " (", 1023);
+     for (i=1; i<gvcount; i++){
+       int len = strlen (tmpname);
+       if (gnumbs[i] == 207){
+         fprintf(stderr, "Error: Skip XOR with XOR\n");
+         gvcount = i;
+         break;
+       }
+       if (!dh_rng_types[gnumbs[i]]){
+         fprintf(stderr, "Error: Skip invalid -g %d\n", gnumbs[i]);
+         exit(1);
+       }
+       snprintf (&tmpname[len], 1023-len, "%d", gnumbs[i]);
+       if (i < gvcount-1)
+         strncat (tmpname, "^", 1023);
+     }
+     strncat (tmpname, ")", 1023);
+     tmpname[1023] = '\0';
+     memcpy ((char*)dh_rng_types[gennum]->name, tmpname, 1024);
+   }
+ }
 
  /*
   * If we get here, in principle the gennum is valid and the right

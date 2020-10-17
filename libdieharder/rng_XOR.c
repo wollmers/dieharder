@@ -15,7 +15,12 @@
  * each new random number.  Note that it SKIPS THE FIRST ONE which
  * MUST be the XOR rng itself.  So there have to be at least two -g X
  * stanzas on the command line to use XOR, and if there aren't three
- * or more it doesn't "do" anything but use the second one.
+ * or more it mixes it with the default mt19937.
+ *
+ * As expected this is an extremely bad idea:
+ * - Two bad ones get worse.
+ * - A good with a bad one gets a bad one.
+ * - Two good ones get a good or bad one. Depends on your luck.
  */
 static unsigned long int XOR_get (void *vstate);
 static double XOR_get_double (void *vstate);
@@ -40,7 +45,7 @@ XOR_get (void *vstate)
   * to have to decorate this code with error checks...
   */
  state->XOR_rnd = gsl_rng_get(state->grngs[1]);
- for(i=1;i<gvcount;i++){
+ for(i=2;i<gvcount;i++){
    state->XOR_rnd ^= gsl_rng_get(state->grngs[i]);
  }
  return state->XOR_rnd;
@@ -59,10 +64,14 @@ static void XOR_set (void *vstate, unsigned long int s) {
  unsigned int i;
  uint seed_seed;
 
+ if (gvcount < 3) {
+   fprintf(stderr, "Error: XOR needs at least 2 or more -g <arg> options\n");
+   exit(1);
+ }
  /*
   * OK, here's how it works.  grngs[0] is set to mt19937_1999, seeded
   * as per usual, and used (ONLY) to see the remaining generators.
-  * The remaining generators.
+  * The generators start at 1.
   */
  state->grngs[0] = gsl_rng_alloc(dh_rng_types[14]);
  seed_seed = s;
@@ -76,13 +85,14 @@ static void XOR_set (void *vstate, unsigned long int s) {
     */
    state->grngs[i] = gsl_rng_alloc(dh_rng_types[gnumbs[i]]);
    gsl_rng_set(state->grngs[i],gsl_rng_get(state->grngs[0]));
-
  }
 
 }
 
+static char XOR_name[1024] = "XOR\0";
+
 static const gsl_rng_type XOR_type =
-{"XOR (supergenerator)",        /* name */
+{XOR_name,        		/* name */
  UINT_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (XOR_state_t),

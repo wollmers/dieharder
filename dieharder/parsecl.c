@@ -327,6 +327,11 @@ void parsecl(int argc, char **argv)
      Exit(0);
    }
 
+   if (gvcount < 2 && (gnumbs[0] == 207 || !strncmp(gnames[0],"XOR", 127))) {
+     fprintf(stderr, "Error: XOR needs at least 2 or more -g <arg> options\n");
+     Exit(1);
+   }
+   
    /*
     * If help was requested, call the help routine.  This routine does
     * different things depending on the other flags and variables, so
