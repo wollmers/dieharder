@@ -37,6 +37,7 @@
  */
 
 #include <dieharder/libdieharder.h>
+#include "config.h"
 FILE *test_fp;
 
 const gsl_rng_type *dh_rng_types[MAXRNGS];
@@ -127,6 +128,7 @@ void dieharder_rng_types()
  ADD_RNG (jsf);
  ADD_RNG (jsf64);
  ADD_RNG (pcg32);
+
 #ifdef __SIZEOF_INT128__
  ADD_RNG (pcg64);
  //ADD_RNG (pcg64_dxsm);
@@ -149,6 +151,7 @@ void dieharder_rng_types()
   //ADD_RNG (philox2x64);
   //ADD_RNG (philox4x64);
   //ADD_RNG (mt64);
+  i += 9;
 
   // hardware dependent/optimized:
 #ifdef HAVE__RDRAND64_STEP
@@ -160,7 +163,6 @@ void dieharder_rng_types()
 #else
   i++;
 #endif
-#if 0
   if (speck_sse41_capable()){
     ADD_RNG (speck128);
   } else {
@@ -173,7 +175,7 @@ void dieharder_rng_types()
   }
   //ADD_RNG (aesni);
   //ADD_RNG (sfmt);
-#endif
+  i += 2;
 
   MYDEBUG(D_TYPES){
     printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);

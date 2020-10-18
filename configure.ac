@@ -9,7 +9,7 @@ AC_PREREQ(2.59)
 # Be sure to set DIEHARDER_LT_VERSION below at the same time
 # you change this:
 #==================================================================
-AC_INIT([dieharder], [3.31.2beta])
+AC_INIT([dieharder], [3.31.2beta], [https://github.com/rurban/dieharder/issues/])
 AM_INIT_AUTOMAKE([1.14 foreign dist-xz no-installinfo subdir-objects -Wall])
 AC_CONFIG_SRCDIR([dieharder.pc.in])
 RELEASE=1
@@ -17,8 +17,6 @@ AC_SUBST(RELEASE)
 
 AC_CONFIG_HEADERS([config.h])
 # AM_MAINTAINER_MODE
-
-AC_DEFINE([RELEASED], [], [Description])
 
 #==================================================================
 # Library versioning (current:revision:age)
@@ -43,10 +41,13 @@ AC_SUBST(DIEHARDER_LIB_VERSION)
 
 case "$VERSION" in
     *+)
-	AC_DEFINE(RELEASED,0)
+	AC_DEFINE([RELEASED], [0], [If released or not])
+	;;
+    *beta)
+	AC_DEFINE([RELEASED], [0], [If released or not])
 	;;
     *)
-	AC_DEFINE(RELEASED,1)
+	AC_DEFINE([RELEASED], [1], [If released or not])
 	;;
 esac
 AC_SUBST(RELEASED)
@@ -82,20 +83,6 @@ AC_PROG_LIBTOOL
 AC_TYPE_SIZE_T
 AC_C_VOLATILE
 AC_C_INLINE
-
-CFLAGS="$CFLAGS -Wall -Wextra -pedantic -fcommon -fvisibility=default"
-DIEHARDER_CFLAGS="-I$includedir"
-dieharder_CFLAGS="-std=c99 -I$includedir"
-libdieharder_lo_CFLAGS="-I$includedir"
-DIEHARDER_LIBS="-L$libdir -ldieharder"
-ACLOCAL_AMFLAGS="-I m4"
-
-AC_SUBST(DIEHARDER_CFLAGS)
-AC_SUBST(dieharder_CFLAGS)
-AC_SUBST(libdieharder_lo_CFLAGS)
-AC_SUBST(DIEHARDER_LIBS)
-AC_SUBST(ACLOCAL_AMFLAGS)
-AM_CONDITIONAL([HAVE_INSRCDIR], [test x"$srcdir" = x"."])
 
 #==================================================================
 # Checks for libraries, and headers.  Test for dependency libraries
@@ -139,13 +126,131 @@ fi
 
 AC_C_ENDIAN
 
-
 #==================================================================
 # Checks for typedefs, structures, and compiler characteristics.
 #==================================================================
 AC_C_CONST
 AC_TYPE_SIZE_T
+AC_TYPE_UINT64_T
+AC_CHECK_SIZEOF(size_t)
 AC_HEADER_TIME
+
+AC_CHECK_HEADERS([cpuid.h       \
+                  intrin.h      \
+                  immintrin.h   \
+                  xmmintrin.h   \
+                  emmintrin.h   \
+                  tmmintrin.h   \
+                  x86intrin.h   \
+                  xopintrin.h   \
+                  arm_neon.h    \
+                  mmintrin.h    \
+                  altivec.h
+                  ])
+dnl FIXME arm
+CFLAGS="$CFLAGS -march=native"
+AC_MSG_CHECKING([for working _rdrand64_step])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+  [[
+    #include <immintrin.h>
+  ]],
+  [[
+    unsigned long long p = 0;
+    /* Some CPU's might fake it. E.g. AMD Zen2 needs a BIOS patch */
+    if (_rdrand64_step(&p) != 1 || p == 0 || p == (unsigned long long)(-1))
+      exit(1);
+  ]])],[
+    ac_cv__rdrand64_step=1
+    AC_MSG_RESULT([yes])
+  ],[
+    ac_cv__rdrand64_step=
+    AC_MSG_RESULT([no])
+  ])
+if test $ac_cv__rdrand64_step = 1; then
+  AC_DEFINE([HAVE__RDRAND64_STEP], [1],
+    [Define if __rdrand64_step() is supported.])
+else
+AC_MSG_CHECKING([for working _rdrand32_step])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+  [[
+    #include <immintrin.h>
+  ]],
+  [[
+    unsigned p = 0;
+    /* Some CPU's might fake it. E.g. AMD Zen2 needs a BIOS patch */
+    if (_rdrand32_step(&p) != 1 || p == 0 || p == (unsigned)(-1))
+      exit(1);
+  ]])],[
+    ac_cv__rdrand32_step=1
+    AC_MSG_RESULT([yes])
+  ],[
+    ac_cv__rdrand32_step=
+    AC_MSG_RESULT([no])
+  ])
+  if test x$ac_cv__rdrand32_step = x1; then
+    AC_DEFINE([HAVE__RDRAND32_STEP], [1],
+      [Define if __rdrand32_step() is supported.])
+  fi
+fi
+
+AC_MSG_CHECKING([for working _rdseed64_step])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+  [[
+    #include <immintrin.h>
+  ]],
+  [[
+    unsigned long long p = 0;
+    /* Some CPU's might fake it. E.g. AMD Zen2 needs a BIOS patch */
+    if (_rdseed64_step(&p) != 1 || p == 0 || p == (unsigned long long)(-1))
+      exit(1);
+  ]])],[
+    ac_cv__rdseed64_step=1
+    AC_MSG_RESULT([yes])
+  ],[
+    AC_MSG_RESULT([no])
+    ac_cv__rdseed64_step=
+  ])
+if test x$ac_cv__rdseed64_step = x1; then
+  AC_DEFINE([HAVE__RDSEED64_STEP], [1],
+    [Define if __rdseed64_step() is supported.])
+else
+AC_MSG_CHECKING([for working _rdseed32_step])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+  [[
+    #include <immintrin.h>
+  ]],
+  [[
+    unsigned p = 0;
+    /* Some CPU's might fake it. E.g. AMD Zen2 needs a BIOS patch */
+    if (_rdseed32_step(&p) != 1 || p == 0 || p == (unsigned)(-1))
+      exit(1);
+  ]])],[
+    ac_cv__rdseed32_step=1
+    AC_MSG_RESULT([yes])
+  ],[
+    ac_cv__rdseed32_step=
+    AC_MSG_RESULT([no])
+  ])
+  if test x$ac_cv__rdseed32_step = x1; then
+    AC_DEFINE([HAVE__RDSEED32_STEP], [1],
+      [Define if __rdseed32_step() is supported.])
+  fi
+fi
+
+dnl FIXME GH #1 proper exports, -fno-common -fvisibility=hidden
+CFLAGS="$CFLAGS -Wall -Wextra -pedantic -fcommon -fvisibility=default"
+DIEHARDER_CFLAGS="-I$includedir"
+dieharder_CFLAGS="-std=c99 -I$includedir"
+libdieharder_lo_CFLAGS="-I$includedir"
+DIEHARDER_LIBS="-L$libdir -ldieharder"
+ACLOCAL_AMFLAGS="-I m4"
+
+AC_SUBST(DIEHARDER_CFLAGS)
+AC_SUBST(dieharder_CFLAGS)
+AC_SUBST(libdieharder_lo_CFLAGS)
+AC_SUBST(DIEHARDER_LIBS)
+AC_SUBST(ACLOCAL_AMFLAGS)
+AM_CONDITIONAL([HAVE_INSRCDIR], [test x"$srcdir" = x"."])
 
 #==================================================================
 # Files that configure needs to process with this so that they are

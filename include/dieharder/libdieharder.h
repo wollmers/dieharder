@@ -314,3 +314,11 @@ extern unsigned int rmax_mask;        /* Mask for valid section of unsigned int 
 typedef struct {
   double c[RGB_MINIMUM_DISTANCE_MAXDIM];
 } dTuple;
+
+#if defined(__GNUC__) || defined(__clang__)
+#define LIKELY(x) (__builtin_expect((x), 1))
+#define UNLIKELY(x) (__builtin_expect((x), 0))
+#else
+#define LIKELY(x) ((x))
+#define UNLIKELY(x) ((x))
+#endif

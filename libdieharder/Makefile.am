@@ -14,13 +14,19 @@ LITTLE_ENDIAN=@LITTLE_ENDIAN@
 # Man page
 man3_MANS = libdieharder.3
 
-EXTRA_DIST = static_get_bits.c wyhash.h $(man3_MANS)
+EXTRA_DIST = static_get_bits.c wyhash.h cpu_features.h  \
+	     speck-128-common.h speck-128-sse.h speck-128.h \
+	     $(man3_MANS)
+
+# Compile flags (use fairly standard -O3 as default)
+AM_CPPFLAGS = $(DEFINES) -I ${top_srcdir}/include -I ${includedir} -I.
+AM_CFLAGS = -O3 -march=native -Wall -pedantic -Wno-unused-variable
 
 # Library definitions
 lib_LTLIBRARIES = libdieharder.la
 libdieharder_la_LIBADD = -lgsl -lgslcblas -lm
 libdieharder_la_LDFLAGS = -no-undefined -version-number @DIEHARDER_LT_VERSION@
-libdieharder_la_CFLAGS = -std=gnu99
+libdieharder_la_CFLAGS = -std=gnu99 $(AM_CFLAGS)
 
 # Sources
 # The shell script is the easy way to do this, by far.  But it may not
@@ -30,6 +36,7 @@ libdieharder_la_SOURCES = \
 	bits.c \
 	chisq.c \
 	countx.c \
+	cpu_features.c \
 	dab_bytedistrib.c \
 	dab_dct.c \
 	dab_filltree.c \
@@ -74,6 +81,7 @@ libdieharder_la_SOURCES = \
 	rng_aes.c \
 	rijndael-alg-fst.c \
 	rng_ca.c \
+	rng_chacha.c \
 	rng_dev_random.c \
 	rng_dev_arandom.c \
 	rng_dev_urandom.c \
@@ -86,7 +94,9 @@ libdieharder_la_SOURCES = \
 	rng_lxm.c \
 	rng_jsf.c \
 	rng_pcg.c \
+	rng_rdrand.c \
 	rng_romu.c \
+	rng_speck128.c \
 	rng_superkiss.c \
 	rng_stdin_input_raw.c \
 	rng_threefish.c \
@@ -107,11 +117,11 @@ libdieharder_la_SOURCES = \
 	version.c \
 	Xtest.c
 
-#       rng_chacha.c
-#       rng_speck128.c
 #       rng_philox.c
 #       rng_threefry.c
 #       rng_sfmt.c
+#       rng_mt64.c
+#       rng_aesni.c
 #       rgb_lmn.c
 
 # The program/library may need to know what version it is, define
@@ -123,7 +133,3 @@ DEFINES = -DVERSION=$(VERSION) -DLITTLE_ENDIAN=$(LITTLE_ENDIAN)
 #========================================================================
 # C Compiler.  Change only if you must.
 # CC = gcc
-
-# Compile flags (use fairly standard -O3 as default)
-AM_CPPFLAGS = $(DEFINES) -I ${top_srcdir}/include -I ${includedir} -I.
-AM_CFLAGS = -O3 -march=native -Wall -pedantic -Wno-unused-variable
