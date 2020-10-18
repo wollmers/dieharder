@@ -114,6 +114,7 @@ libdieharder_la_SOURCES = \
 	rng_superkiss.c \
 	rng_stdin_input_raw.c \
 	rng_threefish.c \
+	rng_threefry.c \
 	rng_uvag.c \
 	rng_wyrand.c \
 	rng_xoshiro32bit.c \
@@ -132,7 +133,6 @@ libdieharder_la_SOURCES = \
 	Xtest.c
 
 #       rng_philox.c
-#       rng_threefry.c
 #       rgb_lmn.c
 
 # The program/library may need to know what version it is, define
