@@ -12,9 +12,13 @@ uvag_g204_a.out:3
 mt19937_1999_g014_a.out:3
 aesni_g246_a.out:3
 R_wichmann_hill_g400_a.out:3
-AES_OFB_g205_a.out:3
 speck-128_g244_a_Y1_r34.out:3
+threefry4x32_g234_a_Y1.out:3
+AES_OFB_g205_a.out:3
 ranlxd1_g045_a.out:3
+threefry2x64_g235_a_Y1.out:4
+threefry2x32_g233_a_Y1.out:4
+threefry4x64_g236_a_Y1.out:4
 jsf_g222_a.out:4
 romuquad_g235_a_Y1.out:4
 pcg32_g224_a.out:5

@@ -60,8 +60,12 @@ _no FAILED, >1 WEAK_
 |aesni_g246_a.out:3                |     96292  |     100698  |
 |R_wichmann_hill_g400_a.out:3      |     91092  |     107046  |
 |speck-128_g244_a_Y1_r34.out:3     |     72961  |      71054  |
+|threefry4x32_g234_a_Y1.out:3      |     70471  |      36049  |
 |AES_OFB_g205_a.out:3              |     41845  |      43167  |
 |ranlxd1_g045_a.out:3              |     12999  |      13124  |
+|threefry2x64_g235_a_Y1.out:4      |     94116  |      89736  |
+|threefry2x32_g233_a_Y1.out:4      |     79016  |      35896  |
+|threefry4x64_g236_a_Y1.out:4      |     63946  |      64089  |
 |jsf_g222_a.out:4                  |    268269  |     267802  |
 |romuquad_g235_a_Y1.out:4          |    277531  |     258264  |
 |pcg32_g224_a.out:5                |    289259  |     290343  |

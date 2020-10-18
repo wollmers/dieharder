@@ -79,10 +79,10 @@
  GSL_VAR const gsl_rng_type *gsl_rng_romutrio;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_romuquad;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_mt64;			/* rurban Oct 2020 */
- //GSL_VAR const gsl_rng_type *gsl_rng_threefry2x32;		/* rurban Oct 2020 */
- //GSL_VAR const gsl_rng_type *gsl_rng_threefry4x32;		/* rurban Oct 2020 */
- //GSL_VAR const gsl_rng_type *gsl_rng_threefry2x64;		/* rurban Oct 2020 */
- //GSL_VAR const gsl_rng_type *gsl_rng_threefry4x64;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_threefry2x32;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_threefry4x32;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_threefry2x64;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_threefry4x64;		/* rurban Oct 2020 */
  //GSL_VAR const gsl_rng_type *gsl_rng_philox2x32;		/* rurban Oct 2020 */
  //GSL_VAR const gsl_rng_type *gsl_rng_philox4x32;		/* rurban Oct 2020 */
  //GSL_VAR const gsl_rng_type *gsl_rng_philox2x64;		/* rurban Oct 2020 */

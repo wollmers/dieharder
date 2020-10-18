@@ -39,6 +39,8 @@
 #undef VERSION
 #include "config.h"
 #include <dieharder/libdieharder.h>
+#undef VERSION
+#include "config.h"
 FILE *test_fp;
 
 const gsl_rng_type *dh_rng_types[MAXRNGS];
@@ -176,11 +178,11 @@ void dieharder_rng_types()
  ADD_RNG (romuquad);
 #endif
  i = 233;
- //ADD_RNG (threefry2x32);
- //ADD_RNG (threefry4x32);
+ ADD_RNG (threefry2x32);
+ ADD_RNG (threefry4x32);
 #ifndef HAVE_32BITLONG
- //ADD_RNG (threefry2x64);
- //ADD_RNG (threefry4x64);
+  ADD_RNG (threefry2x64);
+  ADD_RNG (threefry4x64);
 #endif
  i = 237;
  //ADD_RNG (philox2x32);
