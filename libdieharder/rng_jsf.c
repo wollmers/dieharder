@@ -6,7 +6,7 @@
  *  Copyright Bob Jenkins 2007, placed into the Public domain.
  *
  *  GSL packaged for dieharder by Reini Urban Oct 2020
- *
+ *  This is also called sfc in randomgen, using and older mixer.
  */
 
 #include <dieharder/libdieharder.h>
@@ -110,9 +110,11 @@ static unsigned long int jsf64_get (void *vstate)
  return (unsigned long int)x->d;
 }
 
+// 64bit only
+#define TO_DOUBLE(x)  ((x) >> 11) * 0x1.0p-53
 static double jsf64_get_double (void *vstate)
 {
-  return (double) jsf64_get (vstate) / (double) UINT_MAX;
+  return TO_DOUBLE(jsf64_get (vstate));
 }
 
 static void

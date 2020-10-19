@@ -73,28 +73,26 @@
  //GSL_VAR const gsl_rng_type *gsl_rng_pcg64_dxsm;		/* rurban Oct 2020 */
  //GSL_VAR const gsl_rng_type *gsl_rng_pcg64_cmdxsm;	       	/* rurban Oct 2020 */
 #endif
-
-/* TODO: (see https://bashtage.github.io/randomgen/new-or-different.html)
-AES Counter (compare to rng_aes)
-ChaCha
-DSFMT
-EFIIX64
-HC128
-JSF (done)
-LXM
-MT64
-PCG32 (done)
-PCG64 (XSL-RR 1.0) (done)
-PCG64 2.0 (64-bit multiplier, DXSM mixing) "cm-dxsm"
-LCG128Mix (128-bit LCG with output mixing) "dxsm"
-Philox
-RDRAND
-Romu
-SFC64
-SFMT
-SPECK128
-ThreeFry
-*/
+ GSL_VAR const gsl_rng_type *gsl_rng_efiix64;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_hc128;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_lxm;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_romutrio;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_romuquad;			/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_mt64;			/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_threefry2x32;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_threefry4x32;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_threefry2x64;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_threefry4x64;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_philox2x32;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_philox4x32;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_philox2x64;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_philox4x64;		/* rurban Oct 2020 */
+ // hardware specific/optimized:
+ //GSL_VAR const gsl_rng_type *gsl_rng_rdrand;			/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_speck128;		/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_chacha;			/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_sfmt;			/* rurban Oct 2020 */
+ //GSL_VAR const gsl_rng_type *gsl_rng_aesni;			/* rurban Oct 2020 */
 
  /*
   * rng global vectors and variables for setup and tests.
@@ -121,3 +119,11 @@ extern unsigned int dh_num_user_rngs;      /* user-added rngs */
 extern unsigned int dh_num_reserved_rngs;  /* rngs added in reserved space by new UI */
 
 extern gsl_rng *rng;                  /* global gsl random number generator */
+
+/* Needed for some seeding */
+static inline uint64_t splitmix64_next(uint64_t *state) {
+  uint64_t z = (*state += 0x9e3779b97f4a7c15);
+  z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
+  z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+  return z ^ (z >> 31);
+}

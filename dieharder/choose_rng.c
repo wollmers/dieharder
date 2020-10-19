@@ -53,9 +53,6 @@ void choose_rng()
   * we must complain, list the available rngs, and exit.  In an
   * interactive UI, I imagine that one would get an error message
   * and a chance to try again.
-  *
-  * MUST FIX THIS for the new combo multigenerator.  All broken.  At least
-  * this should force the output of generator names as usual, though.
   */
  if(select_rng(generator,generator_name,Seed) < 0){
    list_rngs();
@@ -129,16 +126,16 @@ int select_rng(int gennum,char *genname,unsigned int initial_seed)
      }
    }
    if(gennum == -1) return(-1);
- } else if(dh_rng_types[gnumbs[0]] != 0){
+ } else if(dh_rng_types[gnumbs[0]]){
    /*
     * If we get here, then we are entering a gennum type by number.
     * We check to be sure there is a gennum with the given
     * number that CAN be used and return an error if there isn't.
     */
    gennum = gnumbs[0];
-   if(dh_rng_types[gennum]->name[0] == 0){
+   if(!dh_rng_types[gennum]->name[0]){
      /*
-      * No generator with this name.
+      * Wrong name
       */
      return(-1);
    }
@@ -327,7 +324,7 @@ int select_XOR()
  one_file = 0;
  for(j = 0;j < gvcount;j++){
 
-   if(dh_rng_types[gnumbs[j]] == 0){
+   if(!dh_rng_types[gnumbs[j]]){
      return(-1);
    }
 

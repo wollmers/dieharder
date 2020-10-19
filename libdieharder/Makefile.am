@@ -77,12 +77,16 @@ libdieharder_la_SOURCES = \
 	rng_dev_random.c \
 	rng_dev_arandom.c \
 	rng_dev_urandom.c \
+	rng_efiix64.c \
 	rng_file_input.c \
 	rng_file_input_raw.c \
 	rngs_gnu_r.c \
+	rng_hc128.c \
 	rng_kiss.c \
+	rng_lxm.c \
 	rng_jsf.c \
 	rng_pcg.c \
+	rng_romu.c \
 	rng_superkiss.c \
 	rng_stdin_input_raw.c \
 	rng_threefish.c \
@@ -103,6 +107,11 @@ libdieharder_la_SOURCES = \
 	version.c \
 	Xtest.c
 
+#       rng_chacha.c
+#       rng_speck128.c
+#       rng_philox.c
+#       rng_threefry.c
+#       rng_sfmt.c
 #       rgb_lmn.c
 
 # The program/library may need to know what version it is, define

@@ -131,12 +131,53 @@ void dieharder_rng_types()
  ADD_RNG (pcg64);
  //ADD_RNG (pcg64_dxsm);
  //ADD_RNG (pcg64_cmdxsm);
+ i += 2;
+#else
+ i += 3;
+#endif
+  ADD_RNG (efiix64);
+  ADD_RNG (hc128);
+  ADD_RNG (lxm);
+  ADD_RNG (romutrio);
+  ADD_RNG (romuquad);
+  //ADD_RNG (threefry2x32);
+  //ADD_RNG (threefry4x32);
+  //ADD_RNG (threefry2x64);
+  //ADD_RNG (threefry4x64);
+  //ADD_RNG (philox2x32);
+  //ADD_RNG (philox4x32);
+  //ADD_RNG (philox2x64);
+  //ADD_RNG (philox4x64);
+  //ADD_RNG (mt64);
+
+  // hardware dependent/optimized:
+#ifdef HAVE__RDRAND64_STEP
+  if (rdrand_capable()){
+    ADD_RNG (rdrand);
+  } else {
+    i++;
+  }
+#else
+  i++;
+#endif
+#if 0
+  if (speck_sse41_capable()){
+    ADD_RNG (speck128);
+  } else {
+    i++;
+  }
+  if (chacha_simd_capable()){
+    ADD_RNG (chacha);
+  } else {
+    i++;
+  }
+  //ADD_RNG (aesni);
+  //ADD_RNG (sfmt);
 #endif
 
- MYDEBUG(D_TYPES){
-   printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
- }
-
+  MYDEBUG(D_TYPES){
+    printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
+  }
 
  /*
   * These are the R-based generators.  Honestly it would be lovely

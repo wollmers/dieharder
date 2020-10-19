@@ -1,5 +1,5 @@
-Quality of the tested rng functions
-===================================
+Quality and speed of the tested rng functions
+=============================================
 v3.31.2beta https://rurban.github.io/dieharder/QUALITY.md (WIP)
 
 `rng_name _g<num> :<num_weak>`
@@ -14,6 +14,8 @@ _no FAILED, 0 WEAK_
 |xoroshiro64ss_g214_a.out:0	|    261519  |     267279  |
 |xoshiro128++_g211_a.out:0 	|    260260  |     246457  |
 |xoroshiro64s_g215_a_Y1.out:0|   254123  |     272197  |
+|lxm_232_a_Y1.out:0         |    215959  |     205161  |
+|efiix64_g231_a.out 	    |    173178  |     171191  |
 
 GOOD
 ----
@@ -23,6 +25,7 @@ _no FAILED, 1 WEAK_
 |xoroshiro128+_g221_a.out:1	|    250752  |     257546  |
 |xoroshiro128ss_g220_a.out:1|    258438  |     263123  |
 |xoshiro128ss_g212_a.out:1	|    256337  |     234257  |
+|romutrio_g234_a_Y1.out:1   |    275307  |     286574  |
 |mt19937_g013_a.out:1		|    118291  |     111515  |
 |ca_g203_a.out:1			|    117518  |      70488  |
 |mt19937_1998_g015_a.out:1	|    106327  |     101035  |
@@ -38,6 +41,7 @@ _no FAILED, >1 WEAK_
 |taus_g052_a.out:2          |    215197  |     226952  |
 |taus2_g053_a.out:2         |    214293  |     226557  |
 |kiss_g208_a.out:2          |    193869  |     188893  |
+|hc-128_g232_a_Y1.out:2     |    153583  |      99089  |
 |Threefish_OFB_g206_a.out:2 |     92264  |      87436  |
 |ranlxd2_g046_a.out:2       |      7344  |       7381  |
 |tt800_g056_a.out:3         |    201869  |     192733  |
@@ -47,6 +51,7 @@ _no FAILED, >1 WEAK_
 |AES_OFB_g205_a.out:3       |     41845  |      43167  |
 |ranlxd1_g045_a.out:3       |     12999  |      13124  |
 |jsf_g222_a.out:4           |    268269  |     267802  |
+|romuquad_g235_a_Y1.out:4   |    277531  |     258264  |
 |pcg32_g224_a.out:5         |    289259  |     290343  |
 
 BAD

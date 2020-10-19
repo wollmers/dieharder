@@ -60,13 +60,13 @@ void list_rngs()
  if(j == 1) printf("                        |                        |\n");
  if(j == 2) printf("                        |\n");
  printf("#=============================================================================#\n");
- i = 200;
- j = 0;
- while(dh_rng_types[i] != NULL){
+ // there may be holes
+ for(j=0,i=200; i<400; i++){
+   if (!dh_rng_types[i])
+     continue;
    if(j%3 == 0) printf("|   ");
    printf("%3.3d %-20s|", i, dh_rng_types[i]->name);
    if(((j+1)%3) == 0 && i>200) printf("\n");
-   i++;
    j++;
  }
  j = j%3;
