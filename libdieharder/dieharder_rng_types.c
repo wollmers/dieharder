@@ -95,8 +95,8 @@ void dieharder_rng_types()
  i = 200;
  dh_num_dieharder_rngs = 0;
 
-#define ADD_RNG(x) \
- ADD(gsl_rng_##x); \
+#define ADD_RNG(x)  \
+ ADD (gsl_rng_##x); \
  dh_num_dieharder_rngs++
  
  ADD_RNG (stdin_input_raw);
@@ -157,22 +157,14 @@ void dieharder_rng_types()
 #ifdef HAVE__RDRAND64_STEP
   if (rdrand_capable()){
     ADD_RNG (rdrand);
-  } else {
-    i++;
   }
+  else
+    i++;
 #else
   i++;
 #endif
-  if (speck_sse41_capable()){
-    ADD_RNG (speck128);
-  } else {
-    i++;
-  }
-  if (chacha_simd_capable()){
-    ADD_RNG (chacha);
-  } else {
-    i++;
-  }
+  ADD_RNG (chacha);
+  ADD_RNG (speck128);
   //ADD_RNG (aesni);
   //ADD_RNG (sfmt);
   i += 2;
@@ -235,6 +227,6 @@ void dieharder_rng_types()
   * Tally up all the generators we found.
   */
  dh_num_rngs = dh_num_gsl_rngs + dh_num_dieharder_rngs + dh_num_R_rngs +
-			dh_num_hardware_rngs;
+               dh_num_hardware_rngs;
 
 }

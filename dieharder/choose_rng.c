@@ -257,7 +257,8 @@ int select_rng(int gennum,char *genname,unsigned int initial_seed)
   * components of the rng object (difficult to do given that the latter is
   * actually already defined in the GSL, admittedly).
   */
- random_max = gsl_rng_max(rng);
+ //random_max = gsl_rng_max(rng);
+ random_max = rng->type->max;
  rmax = random_max;
  rmax_bits = 0;
  rmax_mask = 0;
@@ -439,7 +440,8 @@ int select_XOR()
   * We don't really need this anymore, I don't think.  But we'll leave it
   * for now.
   */
- random_max = gsl_rng_max(rng);
+ //random_max = gsl_rng_max(rng);
+ random_max = rng->type->max;
  rmax = random_max;
  rmax_bits = 0;
  rmax_mask = 0;

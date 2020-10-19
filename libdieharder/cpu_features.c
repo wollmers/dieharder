@@ -1,4 +1,7 @@
 /*
+ * Copyright (c) 2019 Kevin Sheppard.
+ * Copyright (c) 2020 Reini Urban.
+ *
 **This software is dual-licensed under the The University of Illinois/NCSA
 Open Source License (NCSA) and The 3-Clause BSD License**
 
@@ -39,9 +42,9 @@ THE SOFTWARE.**
 #include <stdint.h>
 #include "cpu_features.h"
 
-void x86_feature_flags(int flags[32], int major)
+uint32_t x86_feature_flags(int major)
 {
-    int i;
+    uint32_t flag;
 #if defined(HAVE_CPUID) && HAVE_CPUID
 #if defined(__clang__) || defined(__GNUC__)
     uint32_t num_ids = 0, reg  = 0, eax = 0, ebx = 0, ecx = 0, edx = 0;
@@ -66,28 +69,19 @@ void x86_feature_flags(int flags[32], int major)
     }
 #endif
 #else
-    uint32_t reg, eax, ebx, ecx, edx;
-    reg = 0; eax = 0; ebx = 0; ecx = 0; edx = 0;
+    uint32_t eax, ebx, ecx, edx;
+    eax = 0; ebx = 0; ecx = 0; edx = 0;
 #endif
     switch(major){
-        case 0:
-        reg = eax;
-        break;
-
-        case 1:
-        reg = ebx;
-        break;
-
-        case 2:
-        reg = ecx;
-        break;
-
-        case 3:
-        reg = edx;
-        break;
-    }
-    for (i = 0; i < 32; i++)
-    {
-        flags[i] = (reg >> i) & 0x1;
+    case 0:
+      return eax;
+    case 1:
+      return ebx;
+    case 2:
+      return ecx;
+    case 3:
+      return edx;
+    default:
+      return 0;
     }
 }

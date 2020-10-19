@@ -121,10 +121,10 @@ extern unsigned int dh_num_reserved_rngs;  /* rngs added in reserved space by ne
 extern gsl_rng *rng;                  /* global gsl random number generator */
 
 extern int rdrand_capable(void);
-extern void speck_use_sse41(int);
-extern int speck_sse41_capable(void);
-extern void chacha_use_simd(int);
-extern int chacha_simd_capable(void);
+//extern void speck_use_sse41(int);
+//extern int speck_sse41_capable(void);
+//extern void chacha_use_simd(int);
+//extern int chacha_simd_capable(void);
 
 /* Needed for some seeding */
 static inline uint64_t splitmix64_next(uint64_t *state) {

@@ -46,6 +46,7 @@
 #endif
 #endif
 
-void x86_feature_flags(int flags[32], int major);
+uint32_t x86_feature_flags(int major);
+#define x86_feature_set(flags, i) ((flags) & (1 << (i)))
 
 #endif /* _CPU_FEATURES_H */

@@ -44,7 +44,6 @@ THE SOFTWARE.**
 #include "cpu_features.h"
 
 typedef struct rdrand_state {
-  int status;
   int retries;
 } rdrand_state_t;
 
@@ -57,21 +56,20 @@ int g_can_rdseed = -1;
 extern int rdrand_capable(void) {
 #if defined(__RDRND__) && __RDRND__ && \
   (defined(HAVE__RDRAND64_STEP) || defined(HAVE__RDRAND32_STEP))
-    int flags[32];
-    x86_feature_flags(flags, DH_ECX);
-    return flags[DH_USE_RDRAND];
+    uint32_t flags = x86_feature_flags(DH_ECX);
+    return x86_feature_set (flags, DH_USE_RDRAND);
 #else
     return 0;
 #endif
 }
 static int rdseed_capable(void) {
-#if defined(__RDRND__) && __RDRND__ && \
+#if defined(__RDRND__) && __RDRND__ && !defined (__MINGW64_VERSION_MAJOR) && \
   (defined(HAVE__RDSEED64_STEP) || defined(HAVE__RDSEED32_STEP))
-    int flags[32];
+    uint32_t flags;
     if (g_can_rdseed != -1)
       return g_can_rdseed;
-    x86_feature_flags(flags, DH_EBX);
-    g_can_rdseed = flags[DH_USE_RDSEED];
+    flags = x86_feature_flags(DH_EBX);
+    g_can_rdseed = x86_feature_set (flags, DH_USE_RDSEED);
     return g_can_rdseed;
 #else
     return 0;
@@ -96,7 +94,6 @@ int rdrand_next64(rdrand_state_t *state, uint64_t *val) {
     val[0] = ((uint64_t)high) << 32 | low;
 #else
     /* Never called on platforms without RDRAND */
-    state->status = 0;
     return 0;
 #endif
     if (status == 0) {
@@ -105,24 +102,23 @@ int rdrand_next64(rdrand_state_t *state, uint64_t *val) {
 #endif
     }
   }
-  state->status = status;
-  return state->status;
+  return status;
 }
 
 static void rdrand_set(void *vstate, unsigned long int seed)
 {
-  rdrand_state_t* rng = (rdrand_state_t*) vstate;
+  rdrand_state_t* state = (rdrand_state_t*) vstate;
   long long unsigned s = (uint64_t)seed;
-  rng->retries = 100;
+  state->retries = 100;
   if (rdseed_capable())
     _rdseed64_step(&s);
 }
 
 static unsigned long int rdrand_get(void *vstate)
 {
-  rdrand_state_t* rng = (rdrand_state_t*) vstate;
-  uint64_t val;
-  if (rdrand_next64(rng, &val))
+  rdrand_state_t* state = (rdrand_state_t*) vstate;
+  uint64_t val = 0ul;
+  if (rdrand_next64(state, &val))
     return (unsigned long int)val;
   else
     return 0UL;

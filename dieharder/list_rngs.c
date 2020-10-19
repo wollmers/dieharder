@@ -37,7 +37,6 @@ void list_rngs()
  dieharder_rng_types();
  add_ui_rngs();
 
-
  /* Version string seems like a good idea */
  dh_header();
  printf("#   %3s %-20s|%3s %-20s|%3s %-20s#\n"," Id","Test Name",

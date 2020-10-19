@@ -113,12 +113,11 @@ static inline void STORE(uint8_t ct[], u128 *X, u128 *Y) {
 }
 
 static inline void speck_128x256_encrypt_sse(uint8_t buffer[],
-                                             const speck_t *round_key,
-                                             const int rounds) {
+                                             const speck_t *round_key) {
   int i;
   u128 X[SPECK_UNROLL / 4], Y[SPECK_UNROLL / 4];
   LOAD(buffer, X, Y);
-  for (i = 0; i < rounds; i++) {
+  for (i = 0; i < SPECK_ROUNDS; i++) {
 #if SPECK_UNROLL == 16
     Rx8(X, Y, round_key[i]);
 #elif SPECK_UNROLL == 12
@@ -134,7 +133,7 @@ static inline void generate_block_ssse3(speck_state_t *state) {
   uint8_t *buffer;
   memcpy(&state->buffer, &state->ctr, sizeof(state->buffer));
   buffer = (uint8_t *)state->buffer;
-  speck_128x256_encrypt_sse(buffer, state->round_key, state->rounds);
+  speck_128x256_encrypt_sse(buffer, state->round_key);
   advance_counter(state);
   state->offset = 0;
 }

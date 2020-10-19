@@ -29,25 +29,25 @@
 #include "cpu_features.h"
 #include "speck-128.h"
 
+// ECX. See https://www.felixcloutier.com/x86/cpuid
 #define SSE41_FEATURE_FLAG 19
 
-int DH_USE_SSE41;
+int g_can_sse41;
 
-extern int speck_sse41_capable(void)
+static int speck_sse41_capable(void)
 {
 #if defined(__SSSE3__) && __SSSE3__
-    int flags[32];
-    x86_feature_flags(flags, DH_ECX);
-    DH_USE_SSE41 = flags[SSE41_FEATURE_FLAG];
-    return DH_USE_SSE41;
+    uint32_t flags = x86_feature_flags(DH_ECX);
+    g_can_sse41 = x86_feature_set (flags, SSE41_FEATURE_FLAG);
+    return g_can_sse41;
 #else
-    DH_USE_SSE41 = 0;
+    g_can_sse41 = 0;
     return 0;
 #endif
 }
-extern void speck_use_sse41(int val) { DH_USE_SSE41 = val; }
+//static void speck_use_sse41(int val) { g_can_sse41 = val; }
 
-void speck_seed(speck_state_t *state, uint64_t seed[4])
+static void speck_seed(speck_state_t *state, uint64_t seed[4])
 {
     int i;
     speck_sse41_capable();
@@ -60,7 +60,7 @@ void speck_seed(speck_state_t *state, uint64_t seed[4])
     }
 }
 
-void speck_set_counter(speck_state_t *state, uint64_t *ctr)
+static void speck_set_counter(speck_state_t *state, uint64_t *ctr)
 {
     int carry, i;
     for (i = 0; i < SPECK_CTR_SZ; i++)
@@ -71,7 +71,7 @@ void speck_set_counter(speck_state_t *state, uint64_t *ctr)
     }
 }
 
-void speck_advance(speck_state_t *state, uint64_t *step)
+static void speck_advance(speck_state_t *state, uint64_t *step)
 {
     uint64_t low;
     uint64_t adj_step[2];

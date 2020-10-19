@@ -146,7 +146,8 @@ static void uvag_set (void *vstate, unsigned long int s) {
  seed_rng = gsl_rng_alloc(dh_rng_types[14]);
  seed_seed = s;
  gsl_rng_set(seed_rng,seed_seed);
- random_max = gsl_rng_max(seed_rng);
+ //random_max = gsl_rng_max(seed_rng);
+ random_max = seed_rng->type->max;
  rmax = random_max;
  rmax_bits = 0;
  rmax_mask = 0;

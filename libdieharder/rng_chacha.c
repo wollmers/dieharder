@@ -36,7 +36,9 @@
 #define M128I_CAST (__m128i)
 #endif
 
-int DH_USE_SIMD;
+#define CHACHA_ROUNDS 20
+
+int g_can_simd;
 
 typedef double * aligned_double_ptr ;
 
@@ -44,7 +46,6 @@ struct chacha_state {
     uint32_t block[16] __attribute__((aligned(16)));
     uint32_t keysetup[8];
     uint64_t ctr[2];
-    int rounds;
 } __attribute__((aligned(16)));
 
 typedef struct chacha_state chacha_state_t;
@@ -97,7 +98,7 @@ static inline void chacha_core_ssse3(chacha_state_t *state) {
     __m128i c = _mm_load_si128((__m128i*) (&state->block[8]));
     __m128i d = _mm_load_si128((__m128i*) (&state->block[12]));
 
-    for (i = 0; i < state->rounds; i += 2) {
+    for (i = 0; i < CHACHA_ROUNDS; i += 2) {
         a = _mm_add_epi32(a, b);
         d = _mm_xor_si128(d, a);
         d = _mm_roti_epi32(d, 16);
@@ -154,7 +155,7 @@ static inline void chacha_core(chacha_state_t *state) {
         x[a] = x[a] + x[b]; x[d] ^= x[a]; x[d] = CHACHA_ROTL32(x[d],  8); \
         x[c] = x[c] + x[d]; x[b] ^= x[c]; x[b] = CHACHA_ROTL32(x[b],  7)
 
-    for (i = 0; i < state->rounds ; i += 2) {
+    for (i = 0; i < CHACHA_ROUNDS ; i += 2) {
         CHACHA_QUARTERROUND(state->block, 0, 4,  8, 12);
         CHACHA_QUARTERROUND(state->block, 1, 5,  9, 13);
         CHACHA_QUARTERROUND(state->block, 2, 6, 10, 14);
@@ -185,7 +186,7 @@ static inline void generate_block(chacha_state_t *state) {
 
     for (i = 0; i < 16; ++i) state->block[i] = input[i];
 #if defined(__SSE2__) && __SSE2__
-    if LIKELY(DH_USE_SIMD > 0) {
+    if LIKELY(g_can_simd > 0) {
         chacha_core_ssse3(state);
     } else {
 #endif
@@ -214,11 +215,14 @@ static inline double chacha_next_double(chacha_state_t *state){
     return (chacha_next64(state) >> 11) * (1.0/9007199254740992.0);
 }
 
+// See https://www.felixcloutier.com/x86/cpuid
 #if defined(__SSE2__) && __SSE2__
 #if defined(__SSSE3__) && __SSSE3__
+/* has SSSE3 */
 #define CHACHA_FEATURE_REG DH_ECX
 #define CHACHA_FEATURE_FLAG 9
 #else
+/* or has SSE2 */
 #define CHACHA_FEATURE_REG DH_EDX
 #define CHACHA_FEATURE_FLAG 26
 #endif
@@ -226,19 +230,19 @@ static inline double chacha_next_double(chacha_state_t *state){
 #define CHACHA_FEATURE_FLAG 0
 #endif
 
+// ssse3 or sse2?
 extern int chacha_simd_capable(void) {
 #if defined(__SSE2__) && __SSE2__
-  int flags[32];
-  x86_feature_flags(flags, CHACHA_FEATURE_REG);
-  DH_USE_SIMD = flags[CHACHA_FEATURE_FLAG];
-  return DH_USE_SIMD;
+  uint32_t flags = x86_feature_flags(CHACHA_FEATURE_REG);
+  g_can_simd = x86_feature_set (flags, CHACHA_FEATURE_FLAG);
+  return g_can_simd;
 #else
-  DH_USE_SIMD = 0;
+  g_can_simd = 0;
   return 0;
 #endif
 }
 
-extern void chacha_use_simd(int flag) { DH_USE_SIMD = flag; }
+extern void chacha_use_simd(int flag) { g_can_simd = flag; }
 
 static void chacha_seed(chacha_state_t *state, uint64_t *seedval, uint64_t *stream,
                         uint64_t *ctr) {
@@ -290,7 +294,7 @@ static void chacha_set(void *vstate, unsigned long int seed)
 static unsigned long int chacha_get(void *vstate)
 {
   chacha_state_t* state = (chacha_state_t*) vstate;
-  return (unsigned long int)chacha_next64(state);
+  return (unsigned long int)chacha_next32(state);
 }
 
 // 64bit only
@@ -303,7 +307,7 @@ static double chacha_get_double (void *vstate)
 
 static const gsl_rng_type chacha_type =
 {"chacha",                      /* name */
- UINT64_MAX,			/* RAND_MAX */
+ UINT32_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (chacha_state_t),
  &chacha_set,

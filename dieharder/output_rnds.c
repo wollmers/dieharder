@@ -21,6 +21,7 @@ void output_rnds()
  unsigned int i,j;
  double d;
  FILE *fp;
+ int numbits = rmax_bits;
 
  if(verbose) {
    fprintf(stderr,"# output_rnds: Dumping %lu rands\n",(unsigned long)tsamples);
@@ -118,7 +119,7 @@ void output_rnds()
      fprintf(fp,"#==================================================================\n");
      fprintf(fp,"# generator %s  seed = %lu\n",gsl_rng_name(rng),seed);
      fprintf(fp,"#==================================================================\n");
-     fprintf(fp,"type: d\ncount: %lu\nnumbit: 32\n",(unsigned long)tsamples);
+     fprintf(fp,"type: d\ncount: %lu\nnumbit: %d\n",(unsigned long)tsamples, numbits);
      for(i=0;i<tsamples;i++){
        j = gsl_rng_get(rng);
        fprintf(fp,"%10u\n",j);
@@ -128,7 +129,7 @@ void output_rnds()
      fprintf(fp,"#==================================================================\n");
      fprintf(fp,"# generator %s  seed = %lu\n",gsl_rng_name(rng),seed);
      fprintf(fp,"#==================================================================\n");
-     fprintf(fp,"type: f\ncount: %lu\nnumbit: 32\n",(unsigned long)tsamples);
+     fprintf(fp,"type: f\ncount: %lu\nnumbit: %d\n",(unsigned long)tsamples, numbits);
      for(i=0;i<tsamples;i++){
        d = gsl_rng_uniform(rng);
        fprintf(fp,"%0.10f\n",d);

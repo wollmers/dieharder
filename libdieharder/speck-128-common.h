@@ -1,13 +1,14 @@
 #ifndef _SPECK_COMMON_H
 #define _SPECK_COMMON_H 1
 
+#undef VERSION
 #include "config.h"
-//#include "../common/randomgen_immintrin.h"
 
-#define SPECK_UNROLL 12
-#define SPECK_BUFFER_SZ 8 * SPECK_UNROLL
+#define SPECK_UNROLL     12
+#define SPECK_BUFFER_SZ  (8 * SPECK_UNROLL)
+#define SPECK_ROUNDS     34
 #define SPECK_MAX_ROUNDS 34 /* Only correct for 128x256 */
-#define SPECK_CTR_SZ SPECK_UNROLL / 2
+#define SPECK_CTR_SZ     (SPECK_UNROLL / 2)
 
 union speck_u {
 #if defined(__SSSE3__) && __SSSE3__
@@ -22,7 +23,6 @@ struct speck_state {
   speck_t round_key[SPECK_MAX_ROUNDS];
   speck_t ctr[SPECK_CTR_SZ];
   uint8_t buffer[SPECK_BUFFER_SZ];
-  int rounds;
 
   int offset;
   int has_uint32;
