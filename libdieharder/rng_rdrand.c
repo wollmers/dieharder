@@ -53,6 +53,7 @@ typedef struct rdrand_state {
 int g_can_rdseed = -1;
 
 // https://software.intel.com/content/www/us/en/develop/articles/intel-digital-random-number-generator-drng-software-implementation-guide.html
+// better avoid broken AMD implementation
 extern int rdrand_capable(void) {
 #if defined(__RDRND__) && __RDRND__ && \
   (defined(HAVE__RDRAND64_STEP) || defined(HAVE__RDRAND32_STEP))

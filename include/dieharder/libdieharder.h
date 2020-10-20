@@ -52,6 +52,7 @@ typedef unsigned int            uint;
 #include <dieharder/tests.h>
 #include <dieharder/dieharder_rng_types.h>
 #include <dieharder/dieharder_test_types.h>
+extern int is_genuine_intel();
 
 /*
  *========================================================================

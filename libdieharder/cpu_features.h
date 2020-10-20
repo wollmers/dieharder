@@ -46,6 +46,11 @@
 #endif
 #endif
 
+/* returns
+   1 if vendorid is Genuine Intel,
+   0 if AMD or other, or
+  -1 if unknown, no CPUID insn */
+extern int is_genuine_intel();
 uint32_t x86_feature_flags(int major);
 #define x86_feature_set(flags, i) ((flags) & (1 << (i)))
 

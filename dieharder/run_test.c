@@ -69,6 +69,18 @@ int execute_test(int dtest_num)
 
  /* printf("Test number %d: execute_test(%s) being run.\n",dtest_num,dh_test_types[dtest_num]->sname);*/
 
+ /* check for broken/unpatched AMD with ~80 ints/sec */
+ if (strncmp(gsl_rng_name(rng), "rdrand", 10) == 0 &&
+     !is_genuine_intel() &&
+     tsamples == 0 &&
+     rng_rands_per_second > 0 &&
+     rng_rands_per_second < 100000)
+   {
+     printf ("# Warning: limit broken rdrand on non-Intel hardware (%0.2f ints/sec < 100)\n",
+             rng_rands_per_second / 1000.0);
+     tsamples = 1000; // don't exhaust the poor cpu with only 77 samples/sec
+     psamples = 3;
+   }
  /*
   * First we create the test (to set some values displayed in test header
   * correctly).

@@ -23,9 +23,6 @@ int rgb_timing(Test **test, Rgb_Timing *timing)
  unsigned int *rand_uint;
  double *rand_dbl;
 
- if (strncmp(gsl_rng_name(rng), "rdrand", 10) == 0){
-   test[0]->tsamples = 1000; // don't exhaust the poor cpu
- }
  MYDEBUG(D_RGB_TIMING){
    printf("# Entering rgb_timing(): ps = %u  ts = %u\n",
           test[0]->psamples, test[0]->tsamples);

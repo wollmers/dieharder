@@ -1,11 +1,12 @@
 /*
- * $Id: rgb_bitdist.c 225 2006-08-17 13:15:00Z rgb $
+ * $Id: std_test.c 225 2006-08-17 13:15:00Z rgb $
  *
  * See copyright in copyright.h and the accompanying file COPYING
  *
  */
 
 #include <dieharder/libdieharder.h>
+#include "cpu_features.h"
 
 /*
  * A standard test returns a single-pass p-value as an end result.
@@ -73,6 +74,13 @@ Test **create_test(Dtest *dtest, uint tsamples,uint psamples)
   */
  for(i=0;i<dtest->nkps;i++){
 
+   /* possibly broken AMD */
+   if ((strcmp(dtest->sname, "rgb_timing") == 0) &&
+       (strcmp(gsl_rng_name(rng), "rdrand") == 0) &&
+       !is_genuine_intel()) {
+     dtest->tsamples_std = 1000; // don't exhaust the poor cpu with only 77 samples/sec
+     dtest->psamples_std = 1;
+   }
    /*
     * Do a standard test if -a(ll) is selected no matter what people enter
     * for tsamples or psamples.  ALSO use standard values if tsamples or
@@ -86,15 +94,10 @@ Test **create_test(Dtest *dtest, uint tsamples,uint psamples)
      newtest[i]->tsamples = tsamples;
    }
    if(all == YES || psamples == 0){
-     newtest[i]->psamples = dtest->psamples_std*multiply_p;
-	 if (newtest[i]->psamples < 1) newtest[i]->psamples = 1;
+     newtest[i]->psamples = dtest->psamples_std * multiply_p;
+     if (newtest[i]->psamples < 1) newtest[i]->psamples = 1;
    } else {
      newtest[i]->psamples = psamples;
-   }
-   /* HW protection: */
-   if (strncmp(gsl_rng_name(rng), "rdrand", 10) == 0 && newtest[i]->tsamples > 1000){
-     newtest[i]->tsamples = 1000; // don't exhaust the poor cpu
-     newtest[i]->psamples = 3;
    }
 
    /* Give ntuple an initial value of zero; most tests will set it. */
