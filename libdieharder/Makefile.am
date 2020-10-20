@@ -108,6 +108,7 @@ libdieharder_la_SOURCES = \
 	rng_lxm.c \
 	rngs_lemire.c \
 	rng_pcg.c \
+	rng_philox.c \
 	rng_rdrand.c \
 	rng_sfmt.c \
 	rng_splitmix64.c \
@@ -133,7 +134,6 @@ libdieharder_la_SOURCES = \
 	version.c \
 	Xtest.c
 
-#       rng_philox.c
 #       rgb_lmn.c
 
 # The program/library may need to know what version it is, define

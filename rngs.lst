@@ -93,6 +93,14 @@
 230 lxm
 231 romutrio
 232 romuquad
+233 threefry2x32 
+234 threefry4x32
+235 threefry2x64
+236 threefry4x64
+237 philox2x32
+238 philox4x32
+239 philox2x64
+240 philox4x64
 241 mt64
 242 rdrand
 243 chacha

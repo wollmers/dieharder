@@ -22,6 +22,7 @@ threefry4x64_g236_a_Y1.out:4
 jsf_g222_a.out:4
 romuquad_g235_a_Y1.out:4
 pcg32_g224_a.out:5
+philox2x32_g237_a_Y1.out:5
 speck-128_g244_a_Y1_r32.out:5
 mitchellmoore_g249_a_Y1.out:6
 pcg64_dxsm_g226_a_Y1.out:7
