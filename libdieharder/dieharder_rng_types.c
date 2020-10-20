@@ -188,9 +188,9 @@ void dieharder_rng_types()
 #endif
   ADD_RNG (chacha);
   ADD_RNG (speck128);
+  ADD_RNG (sfmt);
   //ADD_RNG (aesni);
-  //ADD_RNG (sfmt);
-  i += 2;
+  i++;
 
   MYDEBUG(D_TYPES){
     printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);

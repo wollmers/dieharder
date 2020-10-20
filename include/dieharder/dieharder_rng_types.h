@@ -91,7 +91,7 @@
  GSL_VAR const gsl_rng_type *gsl_rng_rdrand;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_speck128;		/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_chacha;			/* rurban Oct 2020 */
- //GSL_VAR const gsl_rng_type *gsl_rng_sfmt;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_sfmt;			/* rurban Oct 2020 */
  //GSL_VAR const gsl_rng_type *gsl_rng_aesni;			/* rurban Oct 2020 */
 
  /*

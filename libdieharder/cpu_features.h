@@ -16,16 +16,8 @@
 #ifdef HAVE_TMMINTRIN_H
 #include <tmmintrin.h>
 #endif
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || defined(HAVE_INTRIN_H)
 #include <intrin.h>
-#endif
-
-#ifdef _WIN32
-#define UNLIKELY(x) ((x))
-#define LIKELY(x) ((x))
-#else
-#define UNLIKELY(x) (__builtin_expect((x), 0))
-#define LIKELY(x) (__builtin_expect((x), 1))
 #endif
 
 #define DH_EAX 0

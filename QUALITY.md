@@ -25,7 +25,7 @@ _no FAILED, 1 WEAK_
 |xoroshiro128+_g221_a.out:1 |    250752  |     257546  |
 |xoroshiro128ss_g220_a.out:1|    258438  |     263123  |
 |xoshiro128ss_g212_a.out:1  |    256337  |     234257  |
-|romutrio_g234_a_Y1.out:1   |    275307  |     286574  |
+|romutrio_g234_a_Y1.out:1   |    275307  |     224290  |
 |mt19937_g013_a.out:1       |    118291  |     111515  |
 |ca_g203_a.out:1            |    117518  |      70488  |
 |mt19937_1998_g015_a.out:1  |    106327  |     101035  |
@@ -64,6 +64,7 @@ BAD
 
 _some FAILED, sorted from better to worst. (Note: 2 always fail)_
 
+    sfmt_g245_a_Y1.out:3:0       |    257412  |     224290  |
     knuthran_g007_a.out:3:1
     ran1_g018_a.out:3:1
     R_knuth_taocp2_g405_a.out:3:1

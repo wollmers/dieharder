@@ -16,6 +16,7 @@ man3_MANS = libdieharder.3
 
 EXTRA_DIST = static_get_bits.c wyhash.h cpu_features.h  \
 	     speck-128-common.h speck-128-sse.h speck-128.h \
+	     sfmt-poly.h sfmt-alti.h sfmt-neon.h sfmt-sse2-msc.h sfmt-sse2.h \
 	     $(man3_MANS)
 
 # Compile flags (use fairly standard -O3 as default)
@@ -26,7 +27,7 @@ AM_CFLAGS = -O3 -march=native -Wall -pedantic -Wno-unused-variable
 lib_LTLIBRARIES = libdieharder.la
 libdieharder_la_LIBADD = -lgsl -lgslcblas -lm
 libdieharder_la_LDFLAGS = -no-undefined -version-number @DIEHARDER_LT_VERSION@
-libdieharder_la_CFLAGS = -std=gnu99 $(AM_CFLAGS)
+libdieharder_la_CFLAGS = -std=c99 $(AM_CFLAGS) -Wno-unused-function -Wno-overlength-strings
 
 # Sources
 # The shell script is the easy way to do this, by far.  But it may not
@@ -96,6 +97,7 @@ libdieharder_la_SOURCES = \
 	rng_pcg.c \
 	rng_rdrand.c \
 	rng_romu.c \
+	rng_sfmt.c \
 	rng_speck128.c \
 	rng_superkiss.c \
 	rng_stdin_input_raw.c \
@@ -119,7 +121,6 @@ libdieharder_la_SOURCES = \
 
 #       rng_philox.c
 #       rng_threefry.c
-#       rng_sfmt.c
 #       rng_mt64.c
 #       rng_aesni.c
 #       rgb_lmn.c
