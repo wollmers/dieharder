@@ -1,6 +1,6 @@
 Quality and speed of the tested rng functions
 =============================================
-v3.31.2beta https://rurban.github.io/dieharder/QUALITY.md (WIP)
+v3.31.2beta https://rurban.github.io/dieharder/QUALITY.html
 
 `rng_name _g<num> :<num_weak>`
 
@@ -9,26 +9,26 @@ BEST
 _no FAILED, 0 WEAK_
 | rng function              |    ints/sec| doubles/sec |
 |:--------------------------|-----------:|------------:|
-|wyrand_g210_a_Y1.out:0	    |    319345  |     283551  |
-|xoshiro128+_g213_a.out:0  	|    289544  |     257579  |
-|xoroshiro64ss_g214_a.out:0	|    261519  |     267279  |
-|xoshiro128++_g211_a.out:0 	|    260260  |     246457  |
+|wyrand_g210_a_Y1.out:0     |    319345  |     283551  |
+|xoshiro128+_g213_a.out:0   |    289544  |     257579  |
+|xoroshiro64ss_g214_a.out:0 |    261519  |     267279  |
+|xoshiro128++_g211_a.out:0  |    260260  |     246457  |
 |xoroshiro64s_g215_a_Y1.out:0|   254123  |     272197  |
 |lxm_232_a_Y1.out:0         |    215959  |     205161  |
-|efiix64_g231_a.out 	    |    173178  |     171191  |
+|efiix64_g231_a.out         |    173178  |     171191  |
 
 GOOD
 ----
 _no FAILED, 1 WEAK_
 | rng function              |    ints/sec| doubles/sec |
 |:--------------------------|-----------:|------------:|
-|xoroshiro128+_g221_a.out:1	|    250752  |     257546  |
+|xoroshiro128+_g221_a.out:1 |    250752  |     257546  |
 |xoroshiro128ss_g220_a.out:1|    258438  |     263123  |
-|xoshiro128ss_g212_a.out:1	|    256337  |     234257  |
+|xoshiro128ss_g212_a.out:1  |    256337  |     234257  |
 |romutrio_g234_a_Y1.out:1   |    275307  |     286574  |
-|mt19937_g013_a.out:1		|    118291  |     111515  |
-|ca_g203_a.out:1			|    117518  |      70488  |
-|mt19937_1998_g015_a.out:1	|    106327  |     101035  |
+|mt19937_g013_a.out:1       |    118291  |     111515  |
+|ca_g203_a.out:1            |    117518  |      70488  |
+|mt19937_1998_g015_a.out:1  |    106327  |     101035  |
 |R_mersenne_twister_g403_a.out:1| 88174  |     121088  |
 |ranlux389_g044_a.out:1     |     10980  |      11295  |
 
