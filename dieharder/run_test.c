@@ -74,9 +74,10 @@ int execute_test(int dtest_num)
      !is_genuine_intel() &&
      tsamples == 0 &&
      rng_rands_per_second > 0 &&
-     rng_rands_per_second < 100000)
+     // 64bit 78, 32bit: 178
+     rng_rands_per_second < 200000)
    {
-     printf ("# Warning: limit broken rdrand on non-Intel hardware (%0.2f ints/sec < 100)\n",
+     printf ("# Warning: limit broken rdrand on non-Intel hardware (%0.2f ints/sec < 200)\n",
              rng_rands_per_second / 1000.0);
      tsamples = 1000; // don't exhaust the poor cpu with only 77 samples/sec
      psamples = 3;

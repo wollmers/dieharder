@@ -2,16 +2,15 @@
  *  rng_xoroshiro64bit.c
  *  From http://prng.di.unimi.it/
  *
- *  Copyright(c) 2020 Reini Urban <rurban@cpan.org>
+ *  Copyright (C) 2020 Reini Urban <rurban@cpan.org>
+ *  Copyright (C) 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)
+ *
+ *  To the extent possible under law, the authors have dedicated all copyright
+ *  and related and neighboring rights to this software to the public domain
+ *  worldwide. This software is distributed without any warranty.
+ *  
+ *  See <http://creativecommons.org/publicdomain/zero/1.0/>.
  */
-
-/*  Written in 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)
-
-To the extent possible under law, the author has dedicated all copyright
-and related and neighboring rights to this software to the public domain
-worldwide. This software is distributed without any warranty.
-
-See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 
 #include <dieharder/libdieharder.h>
 
@@ -276,7 +275,7 @@ static void xoroshiro64_set (void *vstate, unsigned long int s) {
 }
 
 static const gsl_rng_type xoroshiro128_pp_type =
-{"xoroshiro128++",                      /* name */
+{"xoroshiro128++",              /* name */
  UINT64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (xoshiro64_state_t),
@@ -285,7 +284,7 @@ static const gsl_rng_type xoroshiro128_pp_type =
  &xoroshiro128_pp_get_double};
 
 static const gsl_rng_type xoroshiro128_ss_type =
-{"xoroshiro128**",                      /* name */
+{"xoroshiro128**",              /* name */
  UINT64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (xoshiro64_state_t),
@@ -294,7 +293,7 @@ static const gsl_rng_type xoroshiro128_ss_type =
  &xoroshiro128_ss_get_double};
 
 static const gsl_rng_type xoroshiro128_p_type =
-{"xoroshiro128+",                      /* name */
+{"xoroshiro128+",               /* name */
  UINT64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (xoshiro64_state_t),
@@ -303,7 +302,7 @@ static const gsl_rng_type xoroshiro128_p_type =
  &xoroshiro128_p_get_double};
 
 static const gsl_rng_type xoshiro256_pp_type =
-{"xoshiro256++",                      /* name */
+{"xoshiro256++",                /* name */
  UINT64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (xoshiro64_state_t),
@@ -312,7 +311,7 @@ static const gsl_rng_type xoshiro256_pp_type =
  &xoshiro256_pp_get_double};
 
 static const gsl_rng_type xoshiro256_ss_type =
-{"xoshiro256**",                      /* name */
+{"xoshiro256**",                /* name */
  UINT64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (xoshiro64_state_t),
@@ -321,7 +320,7 @@ static const gsl_rng_type xoshiro256_ss_type =
  &xoshiro256_ss_get_double};
 
 static const gsl_rng_type xoshiro256_p_type =
-{"xoshiro256+",                      /* name */
+{"xoshiro256+",                 /* name */
  UINT64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (xoshiro64_state_t),

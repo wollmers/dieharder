@@ -89,7 +89,7 @@
  //GSL_VAR const gsl_rng_type *gsl_rng_philox4x64;		/* rurban Oct 2020 */
  // hardware specific/optimized:
  GSL_VAR const gsl_rng_type *gsl_rng_rdrand;			/* rurban Oct 2020 */
- GSL_VAR const gsl_rng_type *gsl_rng_speck128;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_speck128;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_chacha;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_sfmt;			/* rurban Oct 2020 */
  //GSL_VAR const gsl_rng_type *gsl_rng_aesni;			/* rurban Oct 2020 */
@@ -121,14 +121,10 @@ extern unsigned int dh_num_reserved_rngs;  /* rngs added in reserved space by ne
 extern gsl_rng *rng;                  /* global gsl random number generator */
 
 extern int rdrand_capable(void);
-//extern void speck_use_sse41(int);
-//extern int speck_sse41_capable(void);
-//extern void chacha_use_simd(int);
-//extern int chacha_simd_capable(void);
 
 /* Needed for some seeding */
-static inline uint64_t splitmix64_next(uint64_t *state) {
-  uint64_t z = (*state += 0x9e3779b97f4a7c15);
+static inline uint64_t splitmix64_next(uint64_t *state64) {
+  uint64_t z = (*state64 += 0x9e3779b97f4a7c15);
   z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
   z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
   return z ^ (z >> 31);

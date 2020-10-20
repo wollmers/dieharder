@@ -1,5 +1,5 @@
 /*
- * rng_rdrand.c
+ * rng_efiix64.c
  * Copyright (c) 2020 Reini Urban. dieharder/gsl integration.
 
 ** This software is dual-licensed under the The University of Illinois/NCSA

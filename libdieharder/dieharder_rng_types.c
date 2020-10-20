@@ -36,9 +36,9 @@
  * likely to last for "a while" and maybe "forever".
  */
 
-#include <dieharder/libdieharder.h>
 #undef VERSION
 #include "config.h"
+#include <dieharder/libdieharder.h>
 FILE *test_fp;
 
 const gsl_rng_type *dh_rng_types[MAXRNGS];
@@ -140,6 +140,7 @@ void dieharder_rng_types()
  ADD_RNG (xoshiro128_p);
  ADD_RNG (xoroshiro64_ss);
  ADD_RNG (xoroshiro64_s);
+#ifndef HAVE_32BITLONG
  // 64bit
  ADD_RNG (xoshiro256_pp);
  ADD_RNG (xoshiro256_ss);
@@ -147,12 +148,19 @@ void dieharder_rng_types()
  ADD_RNG (xoroshiro128_pp);
  ADD_RNG (xoroshiro128_ss);
  ADD_RNG (xoroshiro128_p);
+#else
+ i += 6;
+#endif
 
  ADD_RNG (jsf);
+#ifndef HAVE_32BITLONG
  ADD_RNG (jsf64);
+#else
+ i++;
+#endif
  ADD_RNG (pcg32);
 
-#ifdef __SIZEOF_INT128__
+#if defined(__SIZEOF_INT128__)  && !defined(HAVE_32BITLONG)
  ADD_RNG (pcg64);
  //ADD_RNG (pcg64_dxsm);
  //ADD_RNG (pcg64_cmdxsm);
@@ -160,21 +168,38 @@ void dieharder_rng_types()
 #else
  i += 3;
 #endif
+#ifndef HAVE_32BITLONG
   ADD_RNG (efiix64);
   ADD_RNG (hc128);
+#else
+  i += 2;
+#endif
   ADD_RNG (lxm);
+#ifndef HAVE_32BITLONG
   ADD_RNG (romutrio);
   ADD_RNG (romuquad);
+#else
+  i += 2;
+#endif
   //ADD_RNG (threefry2x32);
   //ADD_RNG (threefry4x32);
+  i += 2;
+#ifndef HAVE_32BITLONG
   //ADD_RNG (threefry2x64);
   //ADD_RNG (threefry4x64);
+#else
+  i += 2;
+#endif
   //ADD_RNG (philox2x32);
   //ADD_RNG (philox4x32);
+  i += 2;
+#ifndef HAVE_32BITLONG
   //ADD_RNG (philox2x64);
   //ADD_RNG (philox4x64);
   //ADD_RNG (mt64);
-  i += 9;
+#else
+  i += 3;
+#endif
 
   // hardware dependent/optimized:
 #ifdef HAVE__RDRAND64_STEP
@@ -187,7 +212,11 @@ void dieharder_rng_types()
   i++;
 #endif
   ADD_RNG (chacha);
+#ifndef HAVE_32BITLONG
   ADD_RNG (speck128);
+#else
+  i++;
+#endif
   ADD_RNG (sfmt);
   //ADD_RNG (aesni);
   i++;

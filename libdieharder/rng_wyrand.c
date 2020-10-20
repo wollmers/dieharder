@@ -5,8 +5,16 @@
  *  Copyright(c) 2020 Reini Urban <rurban@cpan.org>
  */
 
+#undef VERSION
+#include "config.h"
 #include <dieharder/libdieharder.h>
 #include "wyhash.h"
+
+#ifdef HAVE_32BITLONG
+#define RNG64_MAX UINT32_MAX
+#else
+#define RNG64_MAX UINT64_MAX
+#endif
 
 /*
  * This is a wrapping of the wyhash.h rng
@@ -57,7 +65,7 @@ static void wyrand_set (void *vstate, unsigned long int s) {
 
 static const gsl_rng_type wyrand_type =
 {"wyrand",                      /* name */
- UINT64_MAX,			/* RAND_MAX */
+ RNG64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (wyrand_state_t),
  &wyrand_set,

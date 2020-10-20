@@ -9,14 +9,19 @@
  *  This is also called sfc in randomgen, using and older mixer.
  */
 
+#undef VERSION
+#include "config.h"
 #include <dieharder/libdieharder.h>
+
+#ifdef HAVE_32BITLONG
+#define RNG64_MAX UINT32_MAX
+#else
+#define RNG64_MAX UINT64_MAX
+#endif
 
 static unsigned long int jsf_get (void *vstate);
 static double jsf_get_double (void *vstate);
 static void jsf_set (void *vstate, unsigned long int s);
-static unsigned long int jsf64_get (void *vstate);
-static double jsf64_get_double (void *vstate);
-static void jsf64_set (void *vstate, unsigned long int s);
 
 typedef struct {
  uint32_t a;
@@ -84,7 +89,15 @@ static const gsl_rng_type jsf_type =
  &jsf_get,
  &jsf_get_double};
 
+const gsl_rng_type *gsl_rng_jsf = &jsf_type;
+
 /* ============ 64bit variant ============= */
+
+#ifndef HAVE_32BITLONG
+
+static unsigned long int jsf64_get (void *vstate);
+static double jsf64_get_double (void *vstate);
+static void jsf64_set (void *vstate, unsigned long int s);
 
 typedef struct {
  uint64_t a;
@@ -132,12 +145,13 @@ jsf64_set (void *vstate, unsigned long int s)
 
 static const gsl_rng_type jsf64_type =
 {"jsf64",			/* name */
- UINT64_MAX,			/* RAND_MAX */
+ RNG64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (jsf64_state_t),
  &jsf64_set,
  &jsf64_get,
  &jsf64_get_double};
 
-const gsl_rng_type *gsl_rng_jsf = &jsf_type;
 const gsl_rng_type *gsl_rng_jsf64 = &jsf64_type;
+
+#endif /* HAVE_32BITLONG */

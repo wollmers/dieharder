@@ -30,6 +30,19 @@ libdieharder_la_LDFLAGS = -no-undefined -version-number @DIEHARDER_LT_VERSION@
 libdieharder_la_CFLAGS = -std=c99 $(AM_CFLAGS) -Wno-unused-function -Wno-overlength-strings
 
 # Sources
+# We cannot represent 64bit results and max on gsl-dictated 32bit unsigned long int.
+# We either skip them on 32bit or change the result to 32bit.
+if HAVE_32BITLONG
+64BIT_RNGS =
+else
+64BIT_RNGS = \
+	rng_efiix64.c \
+	rng_romu.c \
+	rng_speck128.c \
+	rng_xoroshiro64bit.c
+#	rng_mt64.c
+endif
+
 # The shell script is the easy way to do this, by far.  But it may not
 # be sufficiently portable.
 # libdieharder_la_SOURCES = $(shell ls *.c  2>&1 | sed -e "/\/bin\/ls:/d")
@@ -86,26 +99,23 @@ libdieharder_la_SOURCES = \
 	rng_dev_random.c \
 	rng_dev_arandom.c \
 	rng_dev_urandom.c \
-	rng_efiix64.c \
 	rng_file_input.c \
 	rng_file_input_raw.c \
 	rngs_gnu_r.c \
 	rng_hc128.c \
+	rng_jsf.c \
 	rng_kiss.c \
 	rng_lxm.c \
-	rng_jsf.c \
 	rng_pcg.c \
 	rng_rdrand.c \
-	rng_romu.c \
 	rng_sfmt.c \
-	rng_speck128.c \
 	rng_superkiss.c \
 	rng_stdin_input_raw.c \
 	rng_threefish.c \
 	rng_uvag.c \
 	rng_wyrand.c \
 	rng_xoshiro32bit.c \
-	rng_xoroshiro64bit.c \
+	$(64BIT_RNGS) \
 	rng_XOR.c \
 	sample.c \
 	skein_block64.c \
@@ -121,7 +131,6 @@ libdieharder_la_SOURCES = \
 
 #       rng_philox.c
 #       rng_threefry.c
-#       rng_mt64.c
 #       rng_aesni.c
 #       rgb_lmn.c
 

@@ -39,7 +39,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH
 THE SOFTWARE.**
  */
 
+#undef VERSION
+#include "config.h"
 #include <dieharder/libdieharder.h>
+
+#ifdef HAVE_32BITLONG
+#define RNG64_MAX UINT32_MAX
+#else
+#define RNG64_MAX UINT64_MAX
+#endif
 
 /* a in a * s + b
  * https://nuclear.llnl.gov/CNP/rng/rngman/node4.html
@@ -177,7 +185,11 @@ static void lxm_set(void *vstate, unsigned long int seed)
 static unsigned long int lxm_get(void *vstate)
 {
   lxm_state_t* state = (lxm_state_t*) vstate;
+#ifdef HAVE_32BITLONG
+  return (unsigned long int)lxm_next32 (state);
+#else
   return (unsigned long int)lxm_next64 (state);
+#endif
 }
 
 // 64bit only
@@ -185,12 +197,17 @@ static unsigned long int lxm_get(void *vstate)
 static double lxm_get_double (void *vstate)
 {
   lxm_state_t* state = (lxm_state_t*) vstate;
+#ifdef HAVE_32BITLONG
+  uint32_t v = lxm_next32(state);
+  return (v >> 11) * (1.0/9007199254740992.0);
+#else  
   return TO_DOUBLE(lxm_next64 (state));
+#endif
 }
 
 static const gsl_rng_type lxm_type =
 {"lxm",
- UINT64_MAX,			/* RAND_MAX */
+ RNG64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (lxm_state_t),
  &lxm_set,

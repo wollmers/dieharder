@@ -25,6 +25,8 @@
  *     http://www.pcg-random.org
  */
 
+#undef VERSION
+#include "config.h"
 #include <dieharder/libdieharder.h>
 
 #ifdef __SIZEOF_INT128__
@@ -88,7 +90,7 @@ static const gsl_rng_type pcg32_type =
 
 const gsl_rng_type *gsl_rng_pcg32 = &pcg32_type;
 
-#ifdef HAVE_UINT128_T
+#if defined(HAVE_UINT128_T) && !defined(HAVE_32BITLONG)
 
 /* pcg64: avoid emulated 128bit math for now. gcc/clang 64bit only */
 
@@ -224,7 +226,7 @@ pcg64_get_double (void *vstate)
 
 static const gsl_rng_type pcg64_type =
 {"pcg64",                       /* name */
- UINT64_MAX,			/* RAND_MAX */
+ RNG64_MAX,			/* RAND_MAX */
  0,				/* RAND_MIN */
  sizeof (pcg64_random_t),
  &pcg64_set,
