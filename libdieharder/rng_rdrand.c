@@ -94,10 +94,16 @@ int rdrand_next64(rdrand_state_t *state, uint64_t *val) {
     val[0] = ((uint64_t)high) << 32 | low;
 #else
     /* Never called on platforms without RDRAND */
+    MYDEBUG(D_TYPES){
+      printf("no RDRND!\n");
+    }
     return 0;
 #endif
     if (status == 0) {
 #if defined(__RDRND__) && __RDRND__
+      MYDEBUG(D_TYPES){
+        printf("rdrand pause (retry_cnt %d < %d)\n", retries_cnt, state->retries);
+      }
       _mm_pause();
 #endif
     }
@@ -112,6 +118,11 @@ static void rdrand_set(void *vstate, unsigned long int seed)
   state->retries = 100;
   if (rdseed_capable())
     _rdseed64_step(&s);
+  else {
+    MYDEBUG(D_TYPES){
+      printf("no RDSEED64!\n");
+    }
+  }
 }
 
 static unsigned long int rdrand_get(void *vstate)
@@ -120,8 +131,12 @@ static unsigned long int rdrand_get(void *vstate)
   uint64_t val = 0ul;
   if (rdrand_next64(state, &val))
     return (unsigned long int)val;
-  else
+  else {
+    MYDEBUG(D_TYPES){
+      printf("rdrand_next64 failed val=%lu\n", val);
+    }
     return 0UL;
+  }
 }
 
 // 64bit only

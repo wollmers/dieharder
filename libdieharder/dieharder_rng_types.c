@@ -37,6 +37,7 @@
  */
 
 #include <dieharder/libdieharder.h>
+#undef VERSION
 #include "config.h"
 FILE *test_fp;
 
@@ -52,6 +53,19 @@ unsigned int dh_num_user_rngs;      /* user-added rngs */
 unsigned int dh_num_reserved_rngs;  /* ngs added in reserved space by new UI */
 
 gsl_rng *rng;                  /* global gsl random number generator */
+
+/* check if gsl didn't add some of our tests them in-between
+   we'd really need a simple hash table here.
+*/
+static int dieharder_gsl_exists(const char *const name){
+  for(unsigned int i=0;i<dh_num_gsl_rngs;i++) {
+    if (dh_rng_types[i]){
+      if (strcmp(name, dh_rng_types[i]->name) == 0)
+        return 1;
+    }
+  }
+  return 0;
+}
 
 void dieharder_rng_types()
 {
@@ -95,9 +109,18 @@ void dieharder_rng_types()
  i = 200;
  dh_num_dieharder_rngs = 0;
 
-#define ADD_RNG(x)  \
- ADD (gsl_rng_##x); \
- dh_num_dieharder_rngs++
+ /* check if gsl didn't add them in-between. by string */
+#define ADD_RNG(x)                                \
+ if (dieharder_gsl_exists(gsl_rng_##x->name)){    \
+   MYDEBUG(D_TYPES){                              \
+    printf("# startup: gsl_rng_%s already exists in GSL, good. Skipped dieharder -d %d\n",\
+           gsl_rng_##x->name, i);                 \
+   }                                              \
+   i++;                                           \
+ } else {                                         \
+   ADD (gsl_rng_##x);                             \
+   dh_num_dieharder_rngs++;                       \
+ }
  
  ADD_RNG (stdin_input_raw);
  ADD_RNG (file_input_raw);

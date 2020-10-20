@@ -96,7 +96,7 @@ fprintf(stdout, "\n\
 \n\
      3 is kuiper ks, fast, quite inaccurate for small samples, deprecated.\n\
 \n\
-  -l list all known tests.\n\
+  -l list all known tests. After -g list all known rng's.\n\
   -L overlap \n\
 \n\
      1 (use overlap, default) \n\
@@ -133,7 +133,8 @@ fprintf(stdout, "\n\
      for -t or use -a first.  Many tests will ignore -t as they require\n\
      a very specific number of samples to be used in generating their\n\
      statistic.\n");
-fprintf(stdout, "  -W weak - sets the 'weak' threshold to make the test(s) more or less \n\
+ fprintf(stdout,
+"  -W weak - sets the 'weak' threshold to make the test(s) more or less \n\
      forgiving during e.g. a test-to-destruction run.  Default is currently \n\
      0.005. \n\
   -X fail - sets the 'fail' threshold to make the test(s) more or less \n\
@@ -168,7 +169,7 @@ fprintf(stdout, "  -W weak - sets the 'weak' threshold to make the test(s) more 
      causes psamples to be added 100 at a time until a test returns an\n\
      overall pvalue lower than the failure threshold or a specified maximum\n\
      number of psamples (see -P) is reached.  \n");
-fprintf(stdout, "\n\
+ fprintf(stdout, "\n\
      Note well!  In this mode one may well fail due to the alternate\n\
      null hypothesis -- the test itself is a bad test and fails!  Many\n\
      dieharder tests, despite our best efforts, are numerically unstable or\n\

@@ -9,9 +9,9 @@
 
 #define	MYDEBUG(b)  if ( (verbose == b) || (verbose == D_ALL) )
 
- typedef enum {
-   D_QUIET,
-   D_ALL,
+typedef enum {
+   D_QUIET = 0,
+   D_ALL = 1,
    D_DIEHARD_BDAY,
    D_DIEHARD_OPERM5,
    D_DIEHARD_RANK_32x32,
@@ -31,7 +31,7 @@
    D_DIEHARD_CRAPS,
    D_MARSAGLIA_TSANG_GCD,
    D_MARSAGLIA_TSANG_GORILLA,
-   D_RGB_TIMING,
+   D_RGB_TIMING = 21,
    D_RGB_PERSIST,
    D_RGB_BITDIST,
    D_RGB_KSTEST_TEST,
@@ -44,7 +44,7 @@
    D_STS_RUNS,
    D_STS_SERIAL,
    D_STS_BLOCK,
-   D_TYPES,
+   D_TYPES = 34,
    D_USER_TEMPLATE,
    D_MEASURE,
    D_SEED,
@@ -62,4 +62,4 @@
    D_STD_TEST,
    D_RNGS,
    N_DEBUG
- } Debug;
+} Debug;
