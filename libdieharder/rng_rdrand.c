@@ -67,6 +67,11 @@ static int rdseed_capable(void) {
 #if defined(__RDRND__) && __RDRND__ && !defined (__MINGW64_VERSION_MAJOR) && \
   (defined(HAVE__RDSEED64_STEP) || defined(HAVE__RDSEED32_STEP))
     uint32_t flags;
+    /* missing gcc intrinsic, came with 4.6 only. GH #8 */
+#if defined(__GNUC__) && !defined (__clang__) && \
+  (__GNUC_MAJOR__ < 4 || (__GNUC_MAJOR__ == 4 && __GNUC_MINOR__ < 6))
+    g_can_rdseed = 0;
+#endif
     if (g_can_rdseed != -1)
       return g_can_rdseed;
     flags = x86_feature_flags(DH_EBX);
