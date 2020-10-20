@@ -106,7 +106,7 @@ _some FAILED, sorted from better to worst. (Note: 2 always fail)_
     minstd_g011_a.out:8:5
     random64-bsd_g032_a.out:8:6
     random64-libc5_g034_a.out:10:4
-
+    rdrand_g242_a.out:17:19 (also extremely slow!)
 
 VERY BAD
 --------

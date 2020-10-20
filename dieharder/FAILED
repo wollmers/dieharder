@@ -42,6 +42,7 @@ ran0_g017_a.out:8:3
 minstd_g011_a.out:8:5
 random64-bsd_g032_a.out:8:6
 random64-libc5_g034_a.out:10:4
+rdrand_g242_a.out:17:19
 
 random32-libc5_g031_a.out:44:3
 random32-glibc2_g030_a.out:44:7

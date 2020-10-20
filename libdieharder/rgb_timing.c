@@ -23,9 +23,12 @@ int rgb_timing(Test **test, Rgb_Timing *timing)
  unsigned int *rand_uint;
  double *rand_dbl;
 
+ if (strncmp(gsl_rng_name(rng), "rdrand", 10) == 0){
+   test[0]->tsamples = 1000; // don't exhaust the poor cpu
+ }
  MYDEBUG(D_RGB_TIMING){
    printf("# Entering rgb_timing(): ps = %u  ts = %u\n",
-          test[0]->psamples,test[0]->tsamples);
+          test[0]->psamples, test[0]->tsamples);
  }
 
  seed = random_seed();
@@ -42,14 +45,17 @@ int rgb_timing(Test **test, Rgb_Timing *timing)
    stop_timing();
    total_time += delta_timing();
  }
- avg_time = total_time/(test[0]->psamples*test[0]->tsamples);
+ avg_time = total_time/(test[0]->psamples * test[0]->tsamples);
 
  timing->avg_time_nsec = avg_time*1.0e+9;
  timing->rands_per_sec = 1.0/avg_time;
+ MYDEBUG(D_RGB_TIMING){
+   printf("# ints/second: %f\n", timing->rands_per_sec/1000.0);
+ }
 
  free(rand_uint);
 
- rand_dbl = (double *)malloc((size_t)test[0]->tsamples*sizeof(double));
+ rand_dbl = (double *)malloc((size_t)test[0]->tsamples * sizeof(double));
  total_time = 0.0;
  for(i=0;i<test[0]->psamples;i++){
    start_timing();
@@ -61,6 +67,9 @@ int rgb_timing(Test **test, Rgb_Timing *timing)
  }
  avg_time = total_time/(test[0]->psamples*test[0]->tsamples);
  timing->double_rands_per_sec = 1.0/avg_time;
+ MYDEBUG(D_RGB_TIMING){
+   printf("# doubles/second: %f\n", timing->double_rands_per_sec/1000.0);
+ }
  
  free(rand_dbl);
 

@@ -65,7 +65,6 @@ int execute_test(int dtest_num)
      }
    }
    gsl_rng_set(rng,seed);
-
  }
 
  /* printf("Test number %d: execute_test(%s) being run.\n",dtest_num,dh_test_types[dtest_num]->sname);*/

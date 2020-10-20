@@ -116,9 +116,9 @@ static void rdrand_set(void *vstate, unsigned long int seed)
   rdrand_state_t* state = (rdrand_state_t*) vstate;
   long long unsigned s = (uint64_t)seed;
   state->retries = 100;
-  if (rdseed_capable())
+  if (rdseed_capable()){
     _rdseed64_step(&s);
-  else {
+  } else {
     MYDEBUG(D_TYPES){
       printf("no RDSEED64!\n");
     }
@@ -129,9 +129,9 @@ static unsigned long int rdrand_get(void *vstate)
 {
   rdrand_state_t* state = (rdrand_state_t*) vstate;
   uint64_t val = 0ul;
-  if (rdrand_next64(state, &val))
+  if (rdrand_next64(state, &val)){
     return (unsigned long int)val;
-  else {
+  } else {
     MYDEBUG(D_TYPES){
       printf("rdrand_next64 failed val=%lu\n", val);
     }

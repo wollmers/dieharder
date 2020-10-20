@@ -91,6 +91,11 @@ Test **create_test(Dtest *dtest, uint tsamples,uint psamples)
    } else {
      newtest[i]->psamples = psamples;
    }
+   /* HW protection: */
+   if (strncmp(gsl_rng_name(rng), "rdrand", 10) == 0 && newtest[i]->tsamples > 1000){
+     newtest[i]->tsamples = 1000; // don't exhaust the poor cpu
+     newtest[i]->psamples = 3;
+   }
 
    /* Give ntuple an initial value of zero; most tests will set it. */
    newtest[i]->ntuple = 0;

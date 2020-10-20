@@ -158,7 +158,8 @@ int select_rng(int gennum,char *genname,unsigned int initial_seed)
   */
  if(strncmp("file_input",dh_rng_types[gennum]->name,10) == 0){
    if(fromfile != 1){
-     fprintf(stderr,"Error: gennum %s uses file input but no filename has been specified",dh_rng_types[gennum]->name);
+     fprintf(stderr,"Error: rng %s uses file input but no filename has been specified",
+             dh_rng_types[gennum]->name);
      return(-1);
    }
  }
@@ -173,7 +174,8 @@ int select_rng(int gennum,char *genname,unsigned int initial_seed)
   */
  if(rng){
    MYDEBUG(D_SEED){
-     fprintf(stdout,"# choose_rng(): freeing old gennum %s\n",gsl_rng_name(rng));
+     fprintf(stdout,"# choose_rng(): free old rng %s and reset\n",
+             gsl_rng_name(rng));
    }
    gsl_rng_free(rng);
    reset_bit_buffers();
@@ -184,7 +186,8 @@ int select_rng(int gennum,char *genname,unsigned int initial_seed)
   * without leaking memory.
   */
  MYDEBUG(D_SEED){
-   fprintf(stdout,"# choose_rng(): Creating and seeding gennum %s\n",dh_rng_types[gennum]->name);
+   fprintf(stdout,"# choose_rng(): Creating and seeding rng %s\n",
+           dh_rng_types[gennum]->name);
  }
  rng = gsl_rng_alloc(dh_rng_types[gennum]);
 
@@ -337,7 +340,8 @@ int select_XOR()
    if(strncmp("file_input",dh_rng_types[gnumbs[j]]->name,10) == 0){
      one_file++;
      if(fromfile != 1 || one_file > 1){
-       fprintf(stderr,"Error: generator %s uses file input but no filename has been specified",dh_rng_types[gnumbs[j]]->name);
+       fprintf(stderr,"Error: rng %s uses file input but no filename has been specified",
+               dh_rng_types[gnumbs[j]]->name);
        return(-1);
      }
    }
@@ -355,7 +359,8 @@ int select_XOR()
   */
  if(rng){
    MYDEBUG(D_SEED){
-     fprintf(stdout,"# choose_rng(): freeing old gennum %s\n",gsl_rng_name(rng));
+     fprintf(stdout,"# choose_rng(): free old rng %s and reset\n",
+             gsl_rng_name(rng));
    }
    gsl_rng_free(rng);
    reset_bit_buffers();
@@ -368,7 +373,8 @@ int select_XOR()
  MYDEBUG(D_SEED){
  }
  for(j = 0;j < gvcount;j++){
-   fprintf(stdout,"# choose_XOR(): generator[%u] = %s\n",j,dh_rng_types[gnumbs[j]]->name);
+   fprintf(stdout,"# choose_XOR(): generator[%u] = %s\n",j,
+           dh_rng_types[gnumbs[j]]->name);
  }
  /*
   * Change 14 to the actual number
