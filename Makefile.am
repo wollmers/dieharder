@@ -5,7 +5,8 @@ SUBDIRS = libdieharder dieharder include
 if HAVE_LATEX
 SUBDIRS += manual
 endif
-EXTRA_DIST = autogen.sh Copyright dieharder.abs QUALITY.md
+EXTRA_DIST = autogen.sh README Copyright COPYING dieharder.abs \
+	     QUALITY.md $(srcdir)/QUALITY.html md.pl
 
 ACLOCAL_AMFLAGS = -I m4 
 #========================================================================
@@ -77,7 +78,7 @@ $(ABS): Makefile
 # make PRECISELY what we need in terms of the source directories,
 # excluding all restricted material and irrelevant data.
 #========================================================================
-tgz: Makefile COPYING Copyright NOTES README $(SPEC) $(ABS) $(PHP)
+tgz: Makefile COPYING Copyright NOTES README.md $(SPEC) $(ABS) $(PHP)
 	( rm -rf $(TAR) $(TGZ) $(PROJECTDIR); \
 	mkdir -p $(PROJECTDIR); \
 	cd $(LIBRARY); \
@@ -123,7 +124,7 @@ tgz: Makefile COPYING Copyright NOTES README $(SPEC) $(ABS) $(PHP)
 	cp AUTHORS $(PROJECTDIR); \
 	cp NEWS $(PROJECTDIR); \
 	cp ChangeLog $(PROJECTDIR); \
-	cp README $(PROJECTDIR); \
+	cp README.md $(PROJECTDIR); \
 	cp NOTES $(PROJECTDIR); \
 	tar -cvpf $(TAR) \
 	    --exclude=.git \
@@ -213,10 +214,15 @@ rdhprep:
 rdh:	$(RDHPKG)
 	R CMD INSTALL $(RDHPKG)
 
+# generate table from GFM Markdown
+# requires https://github.com/cwjohan/markdown-to-html
+$(srcdir)/QUALITY.html: QUALITY.md
+	-cd $(srcdir) && perl md.pl QUALITY.md
+
 doc_DATA = dieharder.html
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = $(PACKAGE).pc
 
-DISTCLEANFILES = $(builddir)/dieharder.abs config.h.in~
+DISTCLEANFILES = $(builddir)/dieharder.abs config.h.in~ $(srcdir)/QUALITY.html
 MAINTAINERCLEANFILES = config.h.in~

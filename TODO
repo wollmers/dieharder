@@ -2,26 +2,11 @@ RNG's
 =====
 See https://github.com/rurban/dieharder/issues/5
 
-? AES Counter (compare to rng_aes)
-* ChaCha
-* EFIIX64
-* HC128
-* LXM
 * MT64
-* SFMT with dSFMT
 * PCG64 2.0 (64-bit multiplier, DXSM mixing) "cm-dxsm"
 * LCG128Mix (128-bit LCG with output mixing) "dxsm"
 * Philox
-* RDRAND
-* Romu
-* SFC64
-* SPECK128
 * ThreeFry
-
-Done:
-✓ JSF
-✓ PCG32
-✓ PCG64
 
 Tests
 =====
