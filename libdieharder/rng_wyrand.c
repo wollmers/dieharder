@@ -10,12 +10,6 @@
 #include <dieharder/libdieharder.h>
 #include "wyhash.h"
 
-#ifdef HAVE_32BITLONG
-#define RNG64_MAX UINT32_MAX
-#else
-#define RNG64_MAX UINT64_MAX
-#endif
-
 /*
  * This is a wrapping of the wyhash.h rng
  */

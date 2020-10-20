@@ -45,12 +45,6 @@ THE SOFTWARE.**
 #include <dieharder/libdieharder.h>
 #include "cpu_features.h"
 
-#ifdef HAVE_32BITLONG
-#define RNG64_MAX UINT32_MAX
-#else
-#define RNG64_MAX UINT64_MAX
-#endif
-
 typedef struct rdrand_state {
   int retries;
 } rdrand_state_t;

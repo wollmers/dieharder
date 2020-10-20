@@ -13,12 +13,6 @@
 #include "config.h"
 #include <dieharder/libdieharder.h>
 
-#ifdef HAVE_32BITLONG
-#define RNG64_MAX UINT32_MAX
-#else
-#define RNG64_MAX UINT64_MAX
-#endif
-
 static unsigned long int jsf_get (void *vstate);
 static double jsf_get_double (void *vstate);
 static void jsf_set (void *vstate, unsigned long int s);

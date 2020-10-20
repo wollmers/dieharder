@@ -21,7 +21,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(__CYGWIN__)
 #ifndef Types_H
 #define Types_H
 typedef unsigned int            uint;

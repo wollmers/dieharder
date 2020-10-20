@@ -110,8 +110,8 @@ int dab_filltree(Test **test,unsigned int irun) {
 
 
 static inline int insert(double x, double *array, unsigned int startVal) {
- uint d = (startVal + 1) / 2;
- uint i = startVal;
+ unsigned d = (startVal + 1) / 2;
+ unsigned i = startVal;
  while (d > 0) {
    if (array[i] == 0) {
      array[i] = x;

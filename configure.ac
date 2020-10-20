@@ -134,12 +134,18 @@ AC_TYPE_SIZE_T
 AC_TYPE_UINT64_T
 AC_CHECK_SIZEOF(size_t)
 AC_CHECK_SIZEOF(long)
-if test x"$ac_cv_sizeof_size_t" = x"4"; then
+if test x"$ac_cv_sizeof_long" = x"4"; then
   AC_DEFINE([HAVE_32BITLONG], [1],
     [Define if we are on a long = 32bit system.])
   AC_MSG_WARN([skip some 64bit rngs on this long = 32bit system])
+  AC_DEFINE([RNG64_MAX], [UINT32_MAX],
+    [Define to UINT32_MAX or UINT64_MAX])
+  AM_CONDITIONAL([HAVE_32BITLONG], [true])
+else
+  AC_DEFINE([RNG64_MAX], [UINT64_MAX],
+    [Define to UINT32_MAX or UINT64_MAX])
+  AM_CONDITIONAL([HAVE_32BITLONG], [false])
 fi
-AM_CONDITIONAL([HAVE_32BITLONG], [test x"$ac_cv_sizeof_long" = x"4"])
 AC_HEADER_TIME
 
 AC_CHECK_HEADERS([cpuid.h       \
