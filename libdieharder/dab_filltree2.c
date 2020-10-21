@@ -135,7 +135,7 @@ int dab_filltree2(Test **test, unsigned int irun) {
      }
      if (test[0]->tsamples == 0 || test[0]->tsamples > 100000) {
        printf("Error: Wrong tsamples %u\n", test[0]->tsamples);
-       return(0);
+       goto return0;
      }
    }
  }
@@ -180,6 +180,7 @@ int dab_filltree2(Test **test, unsigned int irun) {
      test[1]->pvalues[irun] = chisq_pearson(positionCounts, expected, size/2);
    }
 
+ return0:
  nullfree(positionCounts);
  nullfree(expected);
  nullfree(counts);

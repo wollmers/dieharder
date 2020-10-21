@@ -243,15 +243,20 @@ void run_all_tests()
        }
        break;
 
-     default:
+     /*
+      * Test 207 dab_filltree is broken
+      */
+     case 207:
+       printf("Skipping test %d\n",dtest_num);
+       break;
+
+   default:
        printf("Preparing to run test %d.  ntuple = %d\n",dtest_num,ntuple);
        if(dh_test_types[dtest_num]){   /* This is the fallback to normal tests */
          execute_test(dtest_num);
        }
        break;
-
    }
-
  }
 
  /*

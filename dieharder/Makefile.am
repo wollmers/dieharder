@@ -79,7 +79,7 @@ AM_LDFLAGS =
 # skip longer tests. TODO grep PASSED
 check: $(PROGRAMS)
 	for d in 0 1 2 3 4 8 9 10 11 12 13 14 15 16 \
-	         100 101 102 202 203 204 205 206 207 208 209; \
+	         100 101 102 202 203 204 205 206 208 209; \
         do \
 	  echo dieharder -d $$d -t100 -p1; \
 	  ${top_builddir}/libtool --mode=execute ./dieharder -d $$d -t100 -p1; \

@@ -36,6 +36,7 @@ static double targetData[] = {
 
 static inline int insert(double x, double *array, unsigned int startVal);
 
+// FIXME: this test is broken. Always use dab_filltree2
 int dab_filltree(Test **test,unsigned int irun) {
  unsigned int size = (ntuple == 0) ? 32 : ntuple;
  unsigned int target = sizeof(targetData)/sizeof(double);
@@ -60,18 +61,29 @@ int dab_filltree(Test **test,unsigned int irun) {
  test[1]->ntuple = size;
 
  /* Calculate expected counts. */
- for (i = 0; i < target; i++) {
-   expected[i] = targetData[i] * test[0]->tsamples;
-   if (expected[i] < 4) {
-     if (end == 0)
-       start = i;
-   } else {
-     if (expected[i] > 4)
-       end = i;
+ while (!end){
+   for (i = 0; i < target; i++) {
+     expected[i] = targetData[i] * test[0]->tsamples;
+     if (expected[i] < 4) {
+       if (end == 0)
+         start = i;
+     } else {
+       if (expected[i] > 4)
+         end = i;
+     }
+   }
+   if (!end){
+     test[0]->tsamples *= 2;
+     if(verbose){
+       printf("Not enough tsamples %u => %u\n", test[0]->tsamples/2, test[0]->tsamples);
+     }
+     if (test[0]->tsamples == 0 || test[0]->tsamples > 100000) {
+       printf("Error: Wrong tsamples %u\n", test[0]->tsamples);
+       goto return0;
+     }
    }
  }
  start++;
-
 
  for (j = 0; j < test[0]->tsamples; j++) {
    int ret;
@@ -94,10 +106,13 @@ int dab_filltree(Test **test,unsigned int irun) {
    if (j % (test[0]->tsamples/CYCLES) == 0) rotAmount++;
  }
 
- test[0]->pvalues[irun] = chisq_pearson(counts + start, expected + start, end - start);
+ if (end > start)
+   {
+     test[0]->pvalues[irun] = chisq_pearson(counts + start, expected + start, end - start);
 
- for (i = 0; i < size/2; i++) expected[i] = test[0]->tsamples/(size/2);
- test[1]->pvalues[irun] = chisq_pearson(positionCounts, expected, size/2);
+     for (i = 0; i < size/2; i++) expected[i] = test[0]->tsamples/(size/2);
+     test[1]->pvalues[irun] = chisq_pearson(positionCounts, expected, size/2);
+   }
 
  return0:
  nullfree(positionCounts);
