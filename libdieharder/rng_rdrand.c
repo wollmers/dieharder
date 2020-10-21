@@ -52,10 +52,21 @@ typedef struct rdrand_state {
 #define DH_USE_RDRAND 30
 #define DH_USE_RDSEED 18
 
+/* missing gcc intrinsic, came with 4.6 only. GH #8 */
+#if defined(__GNUC__) && !defined (__clang__) && \
+  (__GNUC_MAJOR__ < 4 || (__GNUC_MAJOR__ == 4 && __GNUC_MINOR__ < 6))
+  #define NO_RDSEED
+#elif defined(__CYGWIN__) || defined(_WIN32)
+  #define NO_RDSEED
+#elif (!defined(HAVE__RDRAND64_STEP) && !defined(HAVE__RDRAND32_STEP))
+  #define NO_RDSEED
+#endif
+
 int g_can_rdseed = -1;
 
 // https://software.intel.com/content/www/us/en/develop/articles/intel-digital-random-number-generator-drng-software-implementation-guide.html
-// better avoid broken AMD implementation
+// To avoid a possibly broken AMD Zen 2 implementation
+// check elsewhere: see is_genuine_intel() and timings.
 extern int rdrand_capable(void) {
 #if defined(__RDRND__) && __RDRND__ && \
   (defined(HAVE__RDRAND64_STEP) || defined(HAVE__RDRAND32_STEP))
@@ -69,9 +80,7 @@ static int rdseed_capable(void) {
 #if defined(__RDRND__) && __RDRND__ && \
   (defined(HAVE__RDSEED64_STEP) || defined(HAVE__RDSEED32_STEP))
     uint32_t flags;
-    /* missing gcc intrinsic, came with 4.6 only. GH #8 */
-#if defined(__GNUC__) && !defined (__clang__) && \
-  (__GNUC_MAJOR__ < 4 || (__GNUC_MAJOR__ == 4 && __GNUC_MINOR__ < 6))
+#ifdef NO_RDSEED
     g_can_rdseed = 0;
 #endif
     if (g_can_rdseed != -1)
@@ -94,11 +103,11 @@ int rdrand_next64(rdrand_state_t *state, uint64_t *val) {
    */
   int status = 0, retries_cnt = 0;
   while ((status == 0) && (retries_cnt++ <= state->retries)) {
-#if defined(__RDRND__) && __RDRND__ && defined(HAVE__RDRAND64_STEP) && \
-  !defined (__MINGW64_VERSION_MAJOR)
-    status = _rdrand64_step((long long unsigned int *)val);
-#elif defined(__RDRND__) && __RDRND__ && \
-  (defined(HAVE__RDRAND32_STEP) || defined(HAVE__RDRAND64_STEP))
+    /* mingw64 fails to inline _rdrand64_step */
+#if defined(__RDRND__) && __RDRND__ && defined(HAVE__RDRAND64_STEP)
+    status = _rdrand64_step((unsigned long long *)val);
+    // dead code:
+#elif defined(__RDRND__) && __RDRND__ && defined(HAVE__RDRAND32_STEP)
     uint32_t low, high;
     status = _rdrand32_step(&low);
     status &= _rdrand32_step(&high);
@@ -122,13 +131,16 @@ int rdrand_next64(rdrand_state_t *state, uint64_t *val) {
   return status;
 }
 
+/* error: inlining failed in call to 'always_inline' '_rdseed64_step': target specific option mismatch */
 static void rdrand_set(void *vstate, unsigned long int seed)
 {
   rdrand_state_t* state = (rdrand_state_t*) vstate;
-  unsigned long long s = (uint64_t)seed;
   state->retries = 100;
   if (rdseed_capable()){
+#ifndef NO_RDSEED
+    unsigned long long int s = (unsigned long long int)seed;
     _rdseed64_step(&s);
+#endif
   } else {
     MYDEBUG(D_TYPES){
       printf("no RDSEED64!\n");
@@ -136,6 +148,7 @@ static void rdrand_set(void *vstate, unsigned long int seed)
   }
 }
 
+// rdrand_capable checked earlier already
 static unsigned long int rdrand_get(void *vstate)
 {
   rdrand_state_t* state = (rdrand_state_t*) vstate;
@@ -150,7 +163,7 @@ static unsigned long int rdrand_get(void *vstate)
   }
 }
 
-#else
+#else /* HAVE_32BITLONG */
 
 int rdrand_next32(rdrand_state_t *state, uint32_t *val) {
   /*
@@ -160,8 +173,7 @@ int rdrand_next32(rdrand_state_t *state, uint32_t *val) {
    */
   int status = 0, retries_cnt = 0;
   while ((status == 0) && (retries_cnt++ <= state->retries)) {
-#if defined(__RDRND__) && __RDRND__ && \
-    (defined(HAVE__RDRAND32_STEP) || defined(HAVE__RDRAND64_STEP))
+#if defined(__RDRND__) && __RDRND__ && defined(HAVE__RDRAND32_STEP)
     status = _rdrand32_step(val);
 #else
     /* Never called on platforms without RDRAND */
@@ -182,13 +194,16 @@ int rdrand_next32(rdrand_state_t *state, uint32_t *val) {
   return status;
 }
 
+/* error: inlining failed in call to 'always_inline' '_rdseed64_step': target specific option mismatch */
 static void rdrand_set(void *vstate, unsigned long int seed)
 {
   rdrand_state_t* state = (rdrand_state_t*) vstate;
-  uint32_t s = (uint32_t)seed;
   state->retries = 100;
   if (rdseed_capable()){
+#ifndef NO_RDSEED
+    unsigned int s = (unsigned int)(seed & 0xffffffff);
     _rdseed32_step(&s);
+#endif
   } else {
     MYDEBUG(D_TYPES){
       printf("no RDSEED32!\n");
@@ -196,6 +211,7 @@ static void rdrand_set(void *vstate, unsigned long int seed)
   }
 }
 
+// rdrand_capable checked earlier already
 static unsigned long int rdrand_get(void *vstate)
 {
   rdrand_state_t* state = (rdrand_state_t*) vstate;

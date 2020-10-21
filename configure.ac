@@ -162,8 +162,9 @@ AC_CHECK_HEADERS([cpuid.h       \
                   ])
 dnl FIXME arm
 CFLAGS="$CFLAGS -march=native"
-AC_MSG_CHECKING([for working _rdrand64_step])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+if test x"$ac_cv_sizeof_long" = x"8"; then
+ AC_MSG_CHECKING([for working _rdrand64_step])
+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
   [[
     #include <immintrin.h>
   ]],
@@ -179,17 +180,40 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
     ac_cv__rdrand64_step=
     AC_MSG_RESULT([no])
   ])
-if test $ac_cv__rdrand64_step = 1; then
+ if test x$ac_cv__rdrand64_step = x1; then
   AC_DEFINE([HAVE__RDRAND64_STEP], [1],
     [Define if __rdrand64_step() is supported.])
-else
-AC_MSG_CHECKING([for working _rdrand32_step])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+ fi
+ AC_MSG_CHECKING([for working _rdseed64_step])
+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
   [[
     #include <immintrin.h>
   ]],
   [[
-    unsigned p = 0;
+    unsigned long long p = 0;
+    if (_rdseed64_step(&p) != 1 || p == 0 || p == (unsigned long long)(-1))
+      exit(1);
+  ]])],[
+    ac_cv__rdseed64_step=1
+    AC_MSG_RESULT([yes])
+  ],[
+    AC_MSG_RESULT([no])
+    ac_cv__rdseed64_step=
+  ])
+ if test x$ac_cv__rdseed64_step = x1; then
+  AC_DEFINE([HAVE__RDSEED64_STEP], [1],
+    [Define if __rdseed64_step() is supported.])
+ fi
+
+else
+
+ AC_MSG_CHECKING([for working _rdrand32_step])
+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+  [[
+    #include <immintrin.h>
+  ]],
+  [[
+    unsigned int p = 0;
     /* Some CPU's might fake it. E.g. AMD Zen2 needs a BIOS patch */
     if (_rdrand32_step(&p) != 1 || p == 0 || p == (unsigned)(-1))
       exit(1);
@@ -200,41 +224,18 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
     ac_cv__rdrand32_step=
     AC_MSG_RESULT([no])
   ])
-  if test x$ac_cv__rdrand32_step = x1; then
+ if test x$ac_cv__rdrand32_step = x1; then
     AC_DEFINE([HAVE__RDRAND32_STEP], [1],
       [Define if __rdrand32_step() is supported.])
-  fi
-fi
+ fi
 
-AC_MSG_CHECKING([for working _rdseed64_step])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+ AC_MSG_CHECKING([for working _rdseed32_step])
+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
   [[
     #include <immintrin.h>
   ]],
   [[
-    unsigned long long p = 0;
-    /* Some CPU's might fake it. E.g. AMD Zen2 needs a BIOS patch */
-    if (_rdseed64_step(&p) != 1 || p == 0 || p == (unsigned long long)(-1))
-      exit(1);
-  ]])],[
-    ac_cv__rdseed64_step=1
-    AC_MSG_RESULT([yes])
-  ],[
-    AC_MSG_RESULT([no])
-    ac_cv__rdseed64_step=
-  ])
-if test x$ac_cv__rdseed64_step = x1; then
-  AC_DEFINE([HAVE__RDSEED64_STEP], [1],
-    [Define if __rdseed64_step() is supported.])
-else
-AC_MSG_CHECKING([for working _rdseed32_step])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-  [[
-    #include <immintrin.h>
-  ]],
-  [[
-    unsigned p = 0;
-    /* Some CPU's might fake it. E.g. AMD Zen2 needs a BIOS patch */
+    unsigned int p = 0;
     if (_rdseed32_step(&p) != 1 || p == 0 || p == (unsigned)(-1))
       exit(1);
   ]])],[
