@@ -93,9 +93,10 @@ void choose_rng()
  * ========================================================================
  */
 
-int select_rng(int gennum,char *genname,unsigned int initial_seed)
+int select_rng(int gennum,
+               UNUSED_PARAM char *genname,
+               UNUSED_PARAM unsigned int initial_seed)
 {
-
  unsigned int i;
 
  /*

@@ -51,7 +51,7 @@ unsigned int nperms,noperms;
 double **cexact,**ceinv,**cexpt,**idty;
 double *cvexact,*cvein,*cvexpt,*vidty;
 
-int rgb_operm(Test **test, unsigned int irun)
+int rgb_operm(UNUSED_PARAM Test **test, UNUSED_PARAM unsigned int irun)
 {
 
  unsigned int i,j,iv;

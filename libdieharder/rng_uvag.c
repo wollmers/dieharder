@@ -69,10 +69,6 @@
  * This is a wrapping of the uvag rng
  */
 
-static unsigned long int uvag_get (void *vstate);
-static double uvag_get_double (void *vstate);
-static void uvag_set (void *vstate, unsigned long int s);
-
 typedef struct
   {
   int i;
@@ -99,10 +95,8 @@ TYPE *rp;
 TYPE rndint;
 unsigned char sindex, svec[255 + WORD];  /* 256 overlapping TYPE seeds */
 
-static inline unsigned long int
-uvag_get (void *vstate)
+static inline unsigned long int uvag_get (UNUSED_PARAM void *vstate)
 {
-
   /*
    * Returns a 32-bit unsigned integer produced by the UVAG
    */
@@ -118,11 +112,8 @@ uvag_get_double (void *vstate)
   return uvag_get (vstate) / (double) UINT_MAX;
 }
 
-static void uvag_set (void *vstate, unsigned long int s) {
-
- /* Initialize automaton using specified seed. */
- uvag_state_t *state __attribute__((unused)) = (uvag_state_t *) vstate;
- 
+static void uvag_set (UNUSED_PARAM void *vstate, unsigned long int s)
+{
  uint i, array_len = 255 + WORD, tot, seed_seed, tmp8;
  unsigned char key[256], *kp, temp;
  gsl_rng *seed_rng;    /* random number generator used to seed uvag */

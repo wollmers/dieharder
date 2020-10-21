@@ -36,10 +36,6 @@
  * This is a wrapping of the /dev/random hardware rng
  */
 
-static unsigned long int ca_get (void *vstate);
-static double ca_get_double (void *vstate);
-static void ca_set (void *vstate, unsigned long int s);
-
 typedef struct
   {
     FILE *fp;
@@ -75,7 +71,7 @@ unsigned int rule[RULESIZE] = {
 };
 
 static inline unsigned long int
-ca_get (void *vstate)
+ca_get (UNUSED_PARAM void *vstate)
 {
   /* Returns a 32-bit unsigned integer produced by the automaton */
 
@@ -120,7 +116,7 @@ ca_get_double (void *vstate)
 }
 
 static void
-ca_set (void *vstate, unsigned long int s) {
+ca_set (void *vstate, unsigned long int seed) {
 
   /* Initialize automaton using specified seed. */
   int i;

@@ -1275,12 +1275,14 @@ void mybitadd(char *dst, int doffset, char *src, int soffset, int slen)
 
 /* static unsigned int pattern_output[BRBUF]; */
 
-void get_rand_pattern(void *result,unsigned int rsize,int *pattern,gsl_rng *gsl_rng)
+void get_rand_pattern(void *result,unsigned int rsize,int *pattern,
+                      UNUSED_PARAM gsl_rng *gsl_rng)
 {
 
  unsigned int i,j,pindex,poffset;
  unsigned int bu,nbits,tmpuint;
  char *resultp;
+ UNUSED_ARG(gsl_rng)
 
  MYDEBUG(D_BITS) {
    printf("# get_rand_pattern: Initializing with rsize = %u\n",rsize);

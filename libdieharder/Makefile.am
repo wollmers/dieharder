@@ -91,7 +91,6 @@ libdieharder_la_SOURCES = \
 	rgb_permutations.c \
 	rgb_persist.c \
 	rgb_timing.c \
-	rngav.c \
 	rng_aes.c \
 	rijndael-alg-fst.c \
 	rng_ca.c \

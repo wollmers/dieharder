@@ -7,9 +7,6 @@
 /*
  * This is a wrapping of the /dev/random hardware rng
  */
-static unsigned long int dev_urandom_get (void *vstate);
-static double dev_urandom_get_double (void *vstate);
-static void dev_urandom_set (void *vstate, unsigned long int s);
 
 typedef struct
   {
@@ -40,18 +37,15 @@ dev_urandom_get_double (void *vstate)
 }
 
 static void
-dev_urandom_set (void *vstate, unsigned long int s)
+dev_urandom_set (void *vstate, UNUSED_PARAM unsigned long int s)
 {
   dev_urandom_state_t *state = (dev_urandom_state_t *) vstate;
-
- if ((state->fp = fopen("/dev/urandom","r")) == NULL) {
-   fprintf(stderr,"Error: Cannot open /dev/urandom, exiting.\n");
-   fprintf(stderr,"/dev/urandom may only be available on Linux systems.\n");
-   exit(0);
- }
-
+  if ((state->fp = fopen("/dev/urandom","r")) == NULL) {
+    fprintf(stderr,"Error: Cannot open /dev/urandom, exiting.\n");
+    fprintf(stderr,"/dev/urandom may only be available on Linux systems.\n");
+    exit(0);
+  }
  return;
-
 }
 
 static const gsl_rng_type dev_urandom_type =

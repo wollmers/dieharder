@@ -323,3 +323,15 @@ typedef struct {
 #define LIKELY(x) ((x))
 #define UNLIKELY(x) ((x))
 #endif
+
+#if defined(__GNUC__) && !defined(__cplusplus)
+#  define UNUSED_PARAM __attribute__((unused))
+#else
+#  define UNUSED_PARAM
+#endif
+#ifndef UNUSED_DECL
+#  define UNUSED_ARG(x) ((void)sizeof(x));
+#else
+#  define UNUSED_ARG(x)
+#endif
+#define UNUSED_VARIABLE(x) ((void)sizeof(x))

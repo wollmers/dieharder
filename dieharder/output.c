@@ -553,7 +553,9 @@ void output_table_line(Dtest *dtest,Test **test)
  *========================================================================
  */
 
-int output_histogram(double *input,char *pvlabel,int inum,double min,double max,int nbins,char *label)
+int output_histogram(double *input, UNUSED_PARAM char *pvlabel,
+                     int inum, double min, double max, int nbins,
+                     UNUSED_PARAM char *label)
 {
 
  int i,j,hindex;

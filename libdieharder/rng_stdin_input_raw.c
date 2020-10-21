@@ -7,12 +7,8 @@
  * This is a wrapping of stdin.
  */
 
-static unsigned long int stdin_input_raw_get (void *vstate);
-static double stdin_input_raw_get_double (void *vstate);
-static void stdin_input_raw_set (void *vstate, unsigned long int s);
-
 static unsigned long int
-stdin_input_raw_get (void *vstate)
+stdin_input_raw_get (UNUSED_PARAM void *vstate)
 {
   unsigned int j;
   if (fread(&j,sizeof(j),1,stdin) != 1) {
@@ -34,7 +30,7 @@ stdin_input_raw_get_double (void *vstate)
 }
 
 static void
-stdin_input_raw_set (void *vstate, unsigned long int s)
+stdin_input_raw_set (UNUSED_PARAM void *vstate, UNUSED_PARAM unsigned long int s)
 {
     /* empty */
 }

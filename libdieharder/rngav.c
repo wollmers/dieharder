@@ -155,7 +155,8 @@ void driver()
   }
 }
 
-int main_rngav( int argc, char **argv)
+#ifdef TEST
+int main(int argc, char **argv)
 {
   u4 i, j, k;
   time_t a,z;
@@ -174,9 +175,7 @@ int main_rngav( int argc, char **argv)
   }
 
   time(&z);
-
   printf("number of seconds: %6lu\n", (unsigned long)(z-a));
-
   return 0;
-
 }
+#endif

@@ -7,10 +7,6 @@
 
 #include <dieharder/libdieharder.h>
 
-static unsigned long int dev_arandom_get (void *vstate);
-static double dev_arandom_get_double (void *vstate);
-static void dev_arandom_set (void *vstate, unsigned long int s);
-
 typedef struct
   {
     FILE *fp;
@@ -40,7 +36,7 @@ dev_arandom_get_double (void *vstate)
 }
 
 static void
-dev_arandom_set (void *vstate, unsigned long int s)
+dev_arandom_set (void *vstate, UNUSED_PARAM unsigned long int s)
 {
   dev_arandom_state_t *state = (dev_arandom_state_t *) vstate;
 

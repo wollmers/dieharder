@@ -16,6 +16,8 @@
 #define RNG_FILE_INPUT_C
 #include <dieharder/libdieharder.h>
 
+static void file_input_set (void *vstate, unsigned long int s);
+
 char filename[K];
 int fromfile;
 int filenumbits;
@@ -27,10 +29,6 @@ char filetype;
  * CAREFULLY how we must proceed to access the state variables inside of a
  * given rng.
  */
-
-static unsigned long int file_input_get (void *vstate);
-static double file_input_get_double (void *vstate);
-static void file_input_set (void *vstate, unsigned long int s);
 
 /*
  * This typedef struct file_input_state_t struct contains the data
@@ -67,7 +65,7 @@ file_input_get_rtot(gsl_rng *rng)
 }
 
 void
-file_input_set_rtot(gsl_rng *rng,uint value)
+file_input_set_rtot(gsl_rng *rng,UNUSED_PARAM uint value)
 {
   file_input_state_t *state = (file_input_state_t *) rng;
   state->rtot = 0;

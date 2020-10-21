@@ -863,15 +863,13 @@ static void period_certification(sfmt_t *sfmt) {
 /*----------------
   PUBLIC FUNCTIONS
   ----------------*/
-#define UNUSED_VARIABLE(x) (void)(x)
 /**
  * This function returns the identification string.
  * The string shows the word size, the Mersenne exponent,
  * and all parameters of this generator.
  * @param sfmt SFMT internal state
  */
-static const char *sfmt_get_idstring(sfmt_t *sfmt) {
-  UNUSED_VARIABLE(sfmt);
+static const char *sfmt_get_idstring(UNUSED_PARAM sfmt_t *sfmt) {
   return SFMT_IDSTR;
 }
 
@@ -881,8 +879,7 @@ static const char *sfmt_get_idstring(sfmt_t *sfmt) {
  * @param sfmt SFMT internal state
  * @return minimum size of array used for fill_array32() function.
  */
-static int sfmt_get_min_array_size32(sfmt_t *sfmt) {
-  UNUSED_VARIABLE(sfmt);
+static int sfmt_get_min_array_size32(UNUSED_PARAM sfmt_t *sfmt) {
   return SFMT_N32;
 }
 
@@ -892,8 +889,7 @@ static int sfmt_get_min_array_size32(sfmt_t *sfmt) {
  * @param sfmt SFMT internal state
  * @return minimum size of array used for fill_array64() function.
  */
-static int sfmt_get_min_array_size64(sfmt_t *sfmt) {
-  UNUSED_VARIABLE(sfmt);
+static int sfmt_get_min_array_size64(UNUSED_PARAM sfmt_t *sfmt) {
   return SFMT_N64;
 }
 

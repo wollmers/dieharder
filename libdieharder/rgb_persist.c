@@ -23,7 +23,7 @@
 
 static unsigned int *rgb_persist_rand_uint;
 
-int rgb_persist(Test **test, Rgb_Persist *persist)
+int rgb_persist(UNUSED_PARAM Test **test, Rgb_Persist *persist)
 {
 
  uint last_rand;
