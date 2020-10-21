@@ -1209,11 +1209,12 @@ void mybitadd(char *dst, int doffset, char *src, int soffset, int slen)
 
  int sindex,dindex;
  int sblen;
- unsigned int tmp;
- char *btmp;
-
- // TODO silence -Warray-bounds or use a proper union
- btmp = (char *)(&tmp + 2);  /* we only need the last two bytes of tmp */
+ //unsigned int tmp;
+ //char *btmp;
+ union bit_u {
+   unsigned int i;
+   char b[4];
+ } btmp;
 
  sindex = soffset/CHAR_BIT;  /* index of first source byte */
  soffset = soffset%CHAR_BIT; /* index WITHIN first source byte */
@@ -1224,53 +1225,50 @@ void mybitadd(char *dst, int doffset, char *src, int soffset, int slen)
  printf("sindex = %d soffset = %d  dindex = %d doffset = %d sblen = %d\n",
    sindex,soffset,dindex,doffset,sblen);
  while(slen > 0){
-   tmp = 0;
-   tmp = (unsigned int) src[sindex++];   /* Put current source byte into workspace. */
-   tmp = 255;
+   btmp.i = 0;
+   btmp.i = (unsigned int) src[sindex++];   /* Put current source byte into workspace. */
+   btmp.i = 255;
    printf("Source byte %2d= ",sindex-1);
    /* dumpbitwin((char *)&tmp,4,0,32); */
    printf("\n");
    /*
-	* This signals the final byte to process
-	*/
+    * This signals the final byte to process
+    */
    if(sblen >= slen){
-	 sblen = slen;                            /* number of bits we get */
+     sblen = slen;                            /* number of bits we get */
    }
-   tmp = tmp >> (CHAR_BIT - soffset - sblen); /* right shift to byte edge */
-   soffset = CHAR_BIT - sblen;                /* fix offset */
+   btmp.i = btmp.i >> (CHAR_BIT - soffset - sblen); /* right shift to byte edge */
+   soffset = CHAR_BIT - sblen;                      /* fix offset */
 
    /*
-	* tmp is now in "standard form" -- right aligned, with
-	* sblen = CHAR_BIT - soffset.  We don't care how we got there -- now
-	* we just put it away.
-	*/
-   tmp = tmp << (CHAR_BIT+soffset-doffset);   /* align with target bytes */
-   dst[dindex] += btmp[0];                    /* always add in left byte */
+    * tmp is now in "standard form" -- right aligned, with
+    * sblen = CHAR_BIT - soffset.  We don't care how we got there -- now
+    * we just put it away.
+    */
+   btmp.i = btmp.i << (CHAR_BIT+soffset-doffset);   /* align with target bytes */
+   dst[dindex] += btmp.b[0];                        /* always add in left byte */
 
    /*
-	* This is the final piece of trickiness.  If the left byte is too small
-	* to reach the right margin of dst[dindex], we do NOT increment dindex,
-	* instead we increment doffset by sblen and are done.  Otherwise we
-	* go ahead and increment dindex and add in the second byte.  We have to
-	* be careful with the boundary case where sblen PRECISELY fills the
-	* first byte, as then we want to increment dindex but set doffset to 0.
-	*/
+    * This is the final piece of trickiness.  If the left byte is too small
+    * to reach the right margin of dst[dindex], we do NOT increment dindex,
+    * instead we increment doffset by sblen and are done.  Otherwise we
+    * go ahead and increment dindex and add in the second byte.  We have to
+    * be careful with the boundary case where sblen PRECISELY fills the
+    * first byte, as then we want to increment dindex but set doffset to 0.
+    */
    if(soffset >= doffset){
-	 doffset += sblen;
-	 if(doffset == CHAR_BIT){
-	   dindex++;
-	   doffset = 0;
-	 }
+     doffset += sblen;
+     if(doffset == CHAR_BIT){
+       dindex++;
+       doffset = 0;
+     }
    } else {
-	 dindex++;
-	 dst[dindex] = btmp[1];
-	 doffset = sblen - CHAR_BIT + doffset;
+     dindex++;
+     dst[dindex] = btmp.b[1];
+     doffset = sblen - CHAR_BIT + doffset;
    }
-
    slen -= sblen;         /* This accounts for the chunk we've just gotten */
-
  }
-
 }
 
 /* static unsigned int pattern_output[BRBUF]; */
