@@ -28,6 +28,9 @@ AC_CONFIG_HEADERS([config.h])
 #==================================================================
 # This command "should" keep libtool up to date.
 AC_CONFIG_MACRO_DIR([m4])
+# Check if automake supports 'pretty' builds, if so enable them by default
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
 AC_CHECK_TOOLS([AR], [gcc-ar ar])
 AM_PROG_AR
 AC_CHECK_TOOLS([RANLIB], [gcc-ranlib ranlib])
