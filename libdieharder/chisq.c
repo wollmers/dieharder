@@ -112,8 +112,7 @@ double chisq_pearson(double *observed,double *expected,unsigned int kmax)
   */
  chisq = 0.0;
  for(k = 0;k < kmax;k++){
-   delchisq = (observed[k] - expected[k])*
-      (observed[k] - expected[k])/expected[k];
+   delchisq = (observed[k] - expected[k]) * (observed[k] - expected[k]) / expected[k];
    chisq += delchisq;
    if(verbose){
      printf("%u:  observed = %f,  expected = %f, delchisq = %f, chisq = %f\n",

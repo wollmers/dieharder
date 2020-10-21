@@ -119,14 +119,27 @@ int dab_filltree2(Test **test, unsigned int irun) {
  memset(positionCounts, 0, sizeof(double) * size/2);
 
  /* Calculate expected counts. */
- for (i = 0; i < target; i++) {
-   expected[i] = targetData[i] * test[0]->tsamples;
-   if (expected[i] < 4) {
-     if (end == 0) start = i;
-   } else if (expected[i] > 4) end = i;
+ while (!end){
+   for (i = 0; i < target; i++) {
+     expected[i] = targetData[i] * test[0]->tsamples;
+     if (expected[i] < 4) {
+       if (!end)
+         start = i;
+     } else if (expected[i] > 4)
+       end = i;
+   }
+   if (!end){
+     test[0]->tsamples *= 2;
+     if(verbose){
+       printf("Not enough tsamples %u => %u\n", test[0]->tsamples/2, test[0]->tsamples);
+     }
+     if (test[0]->tsamples == 0 || test[0]->tsamples > 100000) {
+       printf("Error: Wrong tsamples %u\n", test[0]->tsamples);
+       return(0);
+     }
+   }
  }
  start++;
-
 
  x = gsl_rng_get(rng);
  bitCount = rmax_bits;
@@ -158,12 +171,14 @@ int dab_filltree2(Test **test, unsigned int irun) {
  }
 
  /* First p-value is calculated based on the targetData array. */
- test[0]->pvalues[irun] = chisq_pearson(counts + start, expected + start, end - start);
+ if (end > start)
+   {
+     test[0]->pvalues[irun] = chisq_pearson(counts + start, expected + start, end - start);
 
- /* Second p-value is calculated against a uniform distribution. */
- for (i = 0; i < size/2; i++) expected[i] = test[0]->tsamples/(size/2);
- test[1]->pvalues[irun] = chisq_pearson(positionCounts, expected, size/2);
-
+     /* Second p-value is calculated against a uniform distribution. */
+     for (i = 0; i < size/2; i++) expected[i] = test[0]->tsamples/(size/2);
+     test[1]->pvalues[irun] = chisq_pearson(positionCounts, expected, size/2);
+   }
 
  nullfree(positionCounts);
  nullfree(expected);
