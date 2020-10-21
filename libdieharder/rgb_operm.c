@@ -65,6 +65,9 @@ int rgb_operm(UNUSED_PARAM Test **test, UNUSED_PARAM unsigned int irun)
  gsl_matrix_view CEXACT;
  //gsl_matrix_view CEINV,CEXPT,IDTY;
 
+ if (!rgb_operm_k)
+   rgb_operm_k = 3;
+
  /*
   * For a given n = ntuple size in bits, there are n! bit orderings
   */
@@ -86,6 +89,8 @@ int rgb_operm(UNUSED_PARAM Test **test, UNUSED_PARAM unsigned int irun)
  nperms = gsl_sf_fact(rgb_operm_k);
  noperms = gsl_sf_fact(3*rgb_operm_k-2);
  csamples = rgb_operm_k*rgb_operm_k;
+ if (!nperms)
+   return(0);
  //gsl_permutation * p = gsl_permutation_alloc(nperms);
 
  /*
@@ -104,14 +109,14 @@ int rgb_operm(UNUSED_PARAM Test **test, UNUSED_PARAM unsigned int irun)
  MYDEBUG(D_RGB_OPERM){
    printf("# rgb_operm: Creating and zeroing cexact[][] and cexpt[][].\n");
  }
- cexact = (double **)malloc(nperms*sizeof(double*));
- ceinv  = (double **)malloc(nperms*sizeof(double*));
- cexpt  = (double **)malloc(nperms*sizeof(double*));
- idty   = (double **)malloc(nperms*sizeof(double*));
- cvexact = (double *)malloc(nperms*nperms*sizeof(double));
- cvein   = (double *)malloc(nperms*nperms*sizeof(double));
- cvexpt  = (double *)malloc(nperms*nperms*sizeof(double));
- vidty   = (double *)malloc(nperms*nperms*sizeof(double));
+ cexact = (double **)calloc(nperms,sizeof(double*));
+ ceinv  = (double **)calloc(nperms,sizeof(double*));
+ cexpt  = (double **)calloc(nperms,sizeof(double*));
+ idty   = (double **)calloc(nperms,sizeof(double*));
+ cvexact = (double *)calloc(nperms,nperms*sizeof(double));
+ cvein   = (double *)calloc(nperms,nperms*sizeof(double));
+ cvexpt  = (double *)calloc(nperms,nperms*sizeof(double));
+ vidty   = (double *)calloc(nperms,nperms*sizeof(double));
  for(i=0;i<nperms;i++){
    /* Here we pack addresses to map the matrix addressing onto the vector */
    cexact[i] = &cvexact[i*nperms];
@@ -119,10 +124,10 @@ int rgb_operm(UNUSED_PARAM Test **test, UNUSED_PARAM unsigned int irun)
    cexpt[i] = &cvexpt[i*nperms];
    idty[i] = &vidty[i*nperms];
    for(j = 0;j<nperms;j++){
-	 cexact[i][j] = 0.0;
-	 ceinv[i][j] = 0.0;
-	 cexpt[i][j]  = 0.0;
-	 idty[i][j]   = 0.0;
+     cexact[i][j] = 0.0;
+     ceinv[i][j] = 0.0;
+     cexpt[i][j]  = 0.0;
+     idty[i][j]   = 0.0;
    }
  }
 
@@ -226,15 +231,18 @@ int rgb_operm(UNUSED_PARAM Test **test, UNUSED_PARAM unsigned int irun)
 
  /*
   * Free cexact[][] and cexpt[][]
-  * Fix this when we're done so we don't leak; for now to much trouble.
- for(i=0;i<nperms;i++){
-   free(cexact[i]);
-   free(cexpt[i]);
- }
+  * Fix this when we're done so we don't leak; for now to much trouble. */
  free(cexact);
  free(cexpt);
-  */
+ free(ceinv);
+ free(idty);
+ free(cvexact);
+ free(cvein);
+ free(cvexpt);
+ free(vidty);  
 
+ Vtest_destroy(vtest);
+ free(vtest);
  return(0);
 
 }
@@ -377,18 +385,20 @@ void make_cexact()
    printf("# rgb_operm:==============================\n");
    printf("# rgb_operm: cexact[][] = \n");
  }
- for(i=0;i<nperms;i++){
-   MYDEBUG(D_RGB_OPERM){
-	 printf("# ");
+ if (noperms){
+   for(i=0;i<nperms;i++){
+     MYDEBUG(D_RGB_OPERM){
+       printf("# ");
+     }
+     for(j=0;j<nperms;j++){
+       cexact[i][j] /= noperms;
+       MYDEBUG(D_RGB_OPERM){
+         printf("%10.6f  ",cexact[i][j]);
+       }
+     }
    }
-   for(j=0;j<nperms;j++){
-	 cexact[i][j] /= noperms;
-	 MYDEBUG(D_RGB_OPERM){
-	   printf("%10.6f  ",cexact[i][j]);
-	 }
-   }
    MYDEBUG(D_RGB_OPERM){
-	 printf("\n");
+     printf("\n");
    }
  }
 
@@ -455,21 +465,20 @@ void make_cexpt()
   */
  for(t=0;t<tsamples;t++){
    /*
-	* To sort into a perm, test vector needs to be double.
-	*/
+    * To sort into a perm, test vector needs to be double.
+    */
    for(k=0;k<3*rgb_operm_k - 2;k++) testv[k] = (double) gsl_rng_get(rng);
 
-   /* Not cruft, but quiet...
+   /* Not cruft, but quiet... */
    MYDEBUG(D_RGB_OPERM){
 	 printf("#------------------------------------------------------------------\n");
 	 printf("# Generating offset sample permutation pi's\n");
    }
-   */
    for(k=0;k<2*rgb_operm_k-1;k++){
 	 gsl_sort_index(ps,&testv[k],1,rgb_operm_k);
 	 pi[k] = piperm(ps,rgb_operm_k);
 
-	 /* Not cruft, but quiet...
+	 /* Not cruft, but quiet... */
 	 MYDEBUG(D_RGB_OPERM){
 	   printf("# %u: ",k);
 	   for(ip=k;ip<rgb_operm_k+k;ip++){
@@ -477,53 +486,53 @@ void make_cexpt()
 	   }
 	   printf("\n# ");
 	   for(ip=0;ip<rgb_operm_k;ip++){
-		 printf("%u ",permsample->data[ip]);
-	   }
+             printf("%u ",(unsigned)ps[ip]);
+           }
 	   printf(" = %u\n",pi[k]);
 	 }
-	 */
    }
 
    /*
-	* This is the business end of things.  The covariance matrix is the
-	* the sum of a central function of the permutation indices that yields
-	* nperms-1/nperms on diagonal, -1/nperms off diagonal, for all the
-	* possible permutations, for the FIRST permutation in a sample (fi)
-	* times the sum of the same function over all the overlapping permutations
-	* drawn from the same sample.  Quite simple, really.
-	*/
+    * This is the business end of things.  The covariance matrix is the
+    * the sum of a central function of the permutation indices that yields
+    * nperms-1/nperms on diagonal, -1/nperms off diagonal, for all the
+    * possible permutations, for the FIRST permutation in a sample (fi)
+    * times the sum of the same function over all the overlapping permutations
+    * drawn from the same sample.  Quite simple, really.
+    */
    for(i=0;i<nperms;i++){
-	 fi = fpipi(i,pi[rgb_operm_k-1],nperms);
-	 for(j=0;j<nperms;j++){
-	   fj = 0.0;
-	   for(k=0;k<rgb_operm_k;k++){
-		 fj += fpipi(j,pi[rgb_operm_k - 1 + k],nperms);
+     fi = fpipi(i,pi[rgb_operm_k-1],nperms);
+     for(j=0;j<nperms;j++){
+       fj = 0.0;
+       for(k=0;k<rgb_operm_k;k++){
+         fj += fpipi(j,pi[rgb_operm_k - 1 + k],nperms);
 	 if(k != 0){
-		   fj += fpipi(j,pi[rgb_operm_k - 1 - k],nperms);
+           fj += fpipi(j,pi[rgb_operm_k - 1 - k],nperms);
 	 }
-	   }
-	   cexpt[i][j] += fi*fj;
-	 }
+       }
+       cexpt[i][j] += fi*fj;
+     }
    }
-
  }
 
  MYDEBUG(D_RGB_OPERM){
    printf("# rgb_operm:==============================\n");
    printf("# rgb_operm: cexpt[][] = \n");
  }
- for(i=0;i<nperms;i++){
-   MYDEBUG(D_RGB_OPERM){
-	 printf("# ");
-   }
-   for(j=0;j<nperms;j++){
-	 cexpt[i][j] /= tsamples;
-	 MYDEBUG(D_RGB_OPERM){
-	   printf("%10.6f  ",cexpt[i][j]);
-	 }
-   }
-   MYDEBUG(D_RGB_OPERM){
-	 printf("\n");
+ if (tsamples){
+   for(i=0;i<nperms;i++){
+     MYDEBUG(D_RGB_OPERM){
+       printf("# ");
+     }
+     for(j=0;j<nperms;j++){
+       cexpt[i][j] /= tsamples;
+       MYDEBUG(D_RGB_OPERM){
+         printf("%10.6f  ",cexpt[i][j]);
+       }
+     }
+     MYDEBUG(D_RGB_OPERM){
+       printf("\n");
+     }
    }
  }
 
