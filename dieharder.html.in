@@ -71,11 +71,37 @@ suite you'll ever ware" for testing random numbers.</p>
 
 <hr>
 
-<center><h2><a href="./dieharder">Dieharder Download
+<center><h2><a href="http://www.phy.duke.edu/~rgb/dieharder">Dieharder Related Talks or Papers</a></h2></center>
+
+<ul>
+
+ <li> <a href="http://www.phy.duke.edu/~rgb/dieharder_techexpo_2011.odp">TechExpo 2011 Talk
+(Duke).</a> A short talk given at a Duke's Tech Expo in 2011 as an
+overview of random number generator testing.  Good for beginners.
+
+ <li> <a
+href="http://www.cs.ucl.ac.uk/staff/d.jones/GoodPracticeRNG.pdf">Good
+Practice in (Pseudo) Random Number Generation for
+Bioinformatics Applications</a> by David Jones, UCL Bioinformatics Group
+(E-mail: d dot jones@cs dot ucl dot ac dot uk).  A really excellent
+"must read" guideline for anyone thinking of using random number
+generators in an actual application.  My own advice differs only in that
+I endorse using (well tested) Gnu Scientific Library random number 
+generators as they are generally portable and open source, hence well
+tested.  Several of Jones' implementation of Marsaglia's KISS-family rngs 
+have been added to dieharder and will shortly be added to the GSL under 
+the GPL for general use.
+
+</ul>
+
+
+<hr>
+
+<center><h2><a href="http://www.phy.duke.edu/~rgb/dieharder">Dieharder Download
 Area</a></h2></center>
 
 <p>Dieharder can be freely downloaded from <a
-href="http:www.phy.duke.edu/~rgb/General/dieharder.php">the Dieharder
+href="http://www.phy.duke.edu/~rgb/General/dieharder.php">the Dieharder
 download site</a>.  On this page there should be a long list of previous
 versions of dieharder, and it should tell you what is the current
 snapshot.  The version numbers have the following <i>specific
@@ -373,6 +399,11 @@ it as:</p>
 <p>will list all possible numbers known to the current snapshot of the
 dieharder.</p>
 
+<tt>dieharder -g RNG -a -k2 -Y1</tt>
+
+<p>is the recommended cmdline to run -a(ll) tests for the given rng,
+  with high precision to avoid the <a href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">Multiple comparisons problem<a/>.</p>
+
 <tt>dieharder -l</tt>
 
 <p>should list all the tests implemented in the current snapshop of
@@ -442,7 +473,11 @@ the test" -- AES_OFB and Threefish_OFB are both cryptographic generators
 and should be quite random.  gfsr4, mt19937, and taus (and several
 others) are very good generators in the GSL, as well.  If you are
 developing a new rng, it should compare decently with these generators
-on dieharder test runs.</i>
+on dieharder test runs. The currently best generators are
+wyrand, xoshiro128+, xoroshiro64ss, xoshiro128++, xoroshiro64s,
+lxm, and efiix64. Other good generators with only one weakness are
+xoroshiro128+, xoroshiro128ss, xoshiro128ss, romutrio, mt19937,
+ca, mt19937_1998, R_mersenne_twister and ranlux389.</i>
 
 <p>Note that the stdin_input_raw interface (-g 200) is a "universal"
 interface.  Any generator that can produce a (continuous) stream of
@@ -450,16 +485,16 @@ presumably random bits can be tested with dieharder.  The easiest way to
 demonstrate this is by running:</p>
 
 <pre>
-dieharder -S 1 -o -B -t 100000000 | dieharder -g 200 -d 0
+dieharder -S 1 -B -o -t 1000000000 | dieharder -g 75 -r 3 -n 2
 </pre>
 
 <p>where the first invocation of dieharder generates a stream of binary
 bits drawn from the default generator with seed 1 and the second reads
-those bits from stdin and tests them with the diehard birthdaytest on
-two bit sequences.  Compare the output to:</p>
+those bits from stdin and tests them with the rgb bitdist test on two
+bit sequences.  Compare the output to:</p>
 
 <pre>
-dieharder -S 1 -d 0
+dieharder -S 1 -r 3 -n 2
 </pre>
 
 <p>which runs the same test on the same generator with the same seed
@@ -477,11 +512,11 @@ for the p-value histograms unless there are enough rands to run EACH
 test without repetition (it is harmless to reuse the sequence for
 different tests).  <b>Let the user beware!</b></p>
 
-<p>List of the CURRENT fully implemented tests (as of the 08/18/08
+<p>List of the CURRENT fully implemented tests (as of the @VERSION@
 snapshot):</p>
 <pre>
 #=============================================================================#
-#          dieharder version 3.29.4beta Copyright 2003 Robert G. Brown        #
+#          dieharder version @VERSION@ Copyright 2003 Robert G. Brown        #
 #=============================================================================#
 Installed dieharder tests:
  Test Number                         Test Name                Test Reliability
@@ -491,9 +526,9 @@ Installed dieharder tests:
   -d 2                    Diehard 32x32 Binary Rank Test              Good
   -d 3                      Diehard 6x8 Binary Rank Test              Good
   -d 4                            Diehard Bitstream Test              Good
-  -d 5                                      Diehard OPSO              Good
-  -d 6                                 Diehard OQSO Test              Good
-  -d 7                                  Diehard DNA Test              Good
+  -d 5                                      Diehard OPSO           Suspect
+  -d 6                                 Diehard OQSO Test           Suspect
+  -d 7                                  Diehard DNA Test           Suspect
   -d 8                Diehard Count the 1s (stream) Test              Good
   -d 9                  Diehard Count the 1s Test (byte)              Good
   -d 10                         Diehard Parking Lot Test              Good
@@ -512,6 +547,12 @@ Installed dieharder tests:
   -d 202                           RGB Permutations Test              Good
   -d 203                             RGB Lagged Sum Test              Good
   -d 204                RGB Kolmogorov-Smirnov Test Test              Good
+  -d 205  	                       Byte Distribution	      Good
+  -d 206  	                                 DAB DCT	      Good
+  -d 207  	                      DAB Fill Tree Test	Do Not Use
+  -d 208  	                    DAB Fill Tree 2 Test	      Good
+  -d 209  	                      DAB Monobit 2 Test	      Good
+  -d 900  	       RGB Overlapping Permutations Test	Do Not Use
 </pre>
 
 <p>Full descriptions of the tests are available from within the tool.
@@ -549,6 +590,74 @@ subject to the standard GPL code disclaimer that the code <i>has no
 warranty</i>.  In essence, yes it may be my fault if they don't work but
 using the tool is <i>at your own risk</i> and you can <i>fix it</i> if
 it bothers you and/or I don't fix it first.</p>
+
+<p>List of the CURRENT fully implemented RNG's (as dieharder @VERSION@ and
+gsl 2.6)</p>
+<pre>
+#=============================================================================#
+#          dieharder version @VERSION@ Copyright 2003 Robert G. Brown        #
+#=============================================================================#
+#    Id Test Name           | Id Test Name           | Id Test Name           #
+#=============================================================================#
+|   000 borosh13            |001 cmrg                |002 coveyou             |
+|   003 fishman18           |004 fishman20           |005 fishman2x           |
+|   006 gfsr4               |007 knuthran            |008 knuthran2           |
+|   009 knuthran2002        |010 lecuyer21           |011 minstd              |
+|   012 mrg                 |013 mt19937             |014 mt19937_1999        |
+|   015 mt19937_1998        |016 r250                |017 ran0                |
+|   018 ran1                |019 ran2                |020 ran3                |
+|   021 rand                |022 rand48              |023 random128-bsd       |
+|   024 random128-glibc2    |025 random128-libc5     |026 random256-bsd       |
+|   027 random256-glibc2    |028 random256-libc5     |029 random32-bsd        |
+|   030 random32-glibc2     |031 random32-libc5      |032 random64-bsd        |
+|   033 random64-glibc2     |034 random64-libc5      |035 random8-bsd         |
+|   036 random8-glibc2      |037 random8-libc5       |038 random-bsd          |
+|   039 random-glibc2       |040 random-libc5        |041 randu               |
+|   042 ranf                |043 ranlux              |044 ranlux389           |
+|   045 ranlxd1             |046 ranlxd2             |047 ranlxs0             |
+|   048 ranlxs1             |049 ranlxs2             |050 ranmar              |
+|   051 slatec              |052 taus                |053 taus2               |
+|   054 taus113             |055 transputer          |056 tt800               |
+|   057 uni                 |058 uni32               |059 vax                 |
+|   060 waterman14          |061 zuf                 |                        |
+#=============================================================================#
+|   200 stdin_input_raw     |201 file_input_raw      |202 file_input          |
+|   203 ca                  |204 uvag                |205 AES_OFB             |
+|   206 Threefish_OFB       |207 XOR (supergenerator)|208 kiss                |
+|   209 superkiss           |210 wyrand              |211 xoshiro128++        |
+|   212 xoshiro128**        |213 xoshiro128+         |214 xoroshiro64**       |
+|   215 xoroshiro64*        |216 xoshiro256++        |217 xoshiro256**        |
+|   218 xoshiro256+         |219 xoroshiro128++      |220 xoroshiro128**      |
+|   221 xoroshiro128+       |222 jsf                 |223 jsf64               |
+|   224 pcg32               |225 pcg64               |228 efiix64             |
+|   229 hc-128              |230 lxm                 |231 romutrio            |
+|   232 romuquad            |237 rdrand              |238 chacha              |
+|   239 speck-128           |240 sfmt                |                        |
+#=============================================================================#
+|   400 R_wichmann_hill     |401 R_marsaglia_multic. |402 R_super_duper       |
+|   403 R_mersenne_twister  |404 R_knuth_taocp       |405 R_knuth_taocp2      |
+#=============================================================================#
+|   500 /dev/random         |501 /dev/urandom        |                        |
+#=============================================================================#
+</pre>
+
+<p>You'll find the results of testruns for each generator in <tt>dieharder/NAME*_gNUM_a*.out<tt>
+and the overview of quality and speed at <a href="https://rurban.github.io/dieharder/QUALITY.html">https://rurban.github.io/dieharder/QUALITY.html<a/>.
+Note that the <b>rdrand<b> generator was tested with the broken, unpatched AMD Zen 2 variant.
+</p>
+
+<p>The generators 0-199 are from the installed gsl library,
+  200-399 from libdieharder (with some HW-optimized SIMD variants starting with 237 rdrand),
+  400-499 are R-based,
+  500-599 hardware generators from the current kernel (/dev/random and friends),
+  600-699 user-defined generators (starting with dieharder example),
+  700-999 reserved for future integration with R-like environments.</p>
+
+<p>On systems with 32-bit longs (i.e. Windows) some 64bit generators need to skipped,
+as the gsl api cannot represent those numbers.</p>
+
+<p>The -g 207 XOR supergenerator mixes one or more generators via xor, just to show that
+unqualified mixing will always lead to worse results, never better.</p>
 
 <center><h2>Development Notes</h2></center>
 

@@ -40,7 +40,7 @@ RDIEHARDER = RDieHarder
 #========================================================================
 WLOGIN = ganesh.phy.duke.edu
 WDIR = General
-ABS = $(PROJECT).abs
+ABS = manual/dieharder.html
 PHP = $(PROJECT).php
 
 
@@ -67,10 +67,10 @@ SPEC = $(PROJECT).spec
 #========================================================================
 all: dieharder
 
-$(ABS): Makefile
-	cat $(ABS) | \
-	sed -e 's/^\(<center><H2>Version \)\(.*\)/\1$(VERSION)<\/H2><\/center>/' > /tmp/$(ABS).$$
-	mv /tmp/$(ABS).$$ $(ABS)
+$(ABS): dieharder.html.in
+	cat $< | \
+	  sed -e 's/\@VERSION\@/$(VERSION)/' > /tmp/dieharder.html
+	mv /tmp/dieharder.html $(ABS)
 
 #========================================================================
 # This is a required target for both its own sake and to support the
