@@ -97,6 +97,8 @@ const gsl_rng_type *gsl_rng_pcg32 = &pcg32_type;
 typedef __uint128_t pcg128_t;
 #define PCG_128BIT_CONSTANT(high,low)           \
             (((pcg128_t)(high) << 64) + low)
+#define PCG_HIGH(a) (uint64_t)(a >> 64)
+#define PCG_LOW(a) (uint64_t)(a)
 
 typedef struct {
     pcg128_t state;
@@ -107,8 +109,12 @@ typedef struct {
     pcg128_t inc;
 } pcg_state_setseq_128;
 
+#define PCG_DEFAULT_MULTIPLIER_LOW 4865540595714422341ULL
 #define PCG_DEFAULT_MULTIPLIER_128 \
-        PCG_128BIT_CONSTANT(2549297995355413924ULL,4865540595714422341ULL)
+  PCG_128BIT_CONSTANT(2549297995355413924ULL,PCG_DEFAULT_MULTIPLIER_LOW)
+#define PCG_CHEAP_MULTIPLIER_LOW 0xda942042e4dd58b5ULL
+#define PCG_CHEAP_MULTIPLIER_128                        \
+  PCG_128BIT_CONSTANT(0ULL, PCG_CHEAP_MULTIPLIER_LOW)
 
 static inline uint64_t pcg_rotr_64(uint64_t value, unsigned int rot)
 {
@@ -136,11 +142,10 @@ static inline void pcg_setseq_128_srandom_r(pcg_state_setseq_128* rng,
     pcg_setseq_128_step_r(rng);
 }
 
-#if 0
-#define PCG_DEFAULT_INCREMENT_128  \
-        PCG_128BIT_CONSTANT(6364136223846793005ULL,1442695040888963407ULL)
-#define PCG_STATE_SETSEQ_128_INITIALIZER                                       \
-    { PCG_128BIT_CONSTANT(0x979c9a98d8462005ULL, 0x7d3e9cb6cfe0549bULL),       \
+#define PCG_DEFAULT_INCREMENT_128                                       \
+  PCG_128BIT_CONSTANT(6364136223846793005ULL,1442695040888963407ULL)
+#define PCG_STATE_SETSEQ_128_INITIALIZER                                \
+  { PCG_128BIT_CONSTANT(0x979c9a98d8462005ULL, 0x7d3e9cb6cfe0549bULL),  \
       PCG_128BIT_CONSTANT(0x0000000000000001ULL, 0xda3e39cb94b95bdbULL) }
 
 // unused. i.e. the default pcg64_get
@@ -193,7 +198,6 @@ static inline void pcg_setseq_128_advance_r(pcg_state_setseq_128* rng, pcg128_t 
 #define pcg64_boundedrand_r     pcg_setseq_128_xsl_rr_64_boundedrand_r
 #define pcg64_advance_r         pcg_setseq_128_advance_r
 #define PCG64_INITIALIZER       PCG_STATE_SETSEQ_128_INITIALIZER
-#endif
 
 typedef pcg_state_setseq_128    pcg64_random_t;
 #define pcg64_srandom_r         pcg_setseq_128_srandom_r
@@ -217,7 +221,6 @@ static void pcg64_set(void *vstate, unsigned long int seed)
 
 // 64bit only
 #define TO_DOUBLE(x)  ((x) >> 11) * 0x1.0p-53
-
 static double
 pcg64_get_double (void *vstate)
 {
@@ -235,12 +238,116 @@ static const gsl_rng_type pcg64_type =
 
 const gsl_rng_type *gsl_rng_pcg64 = &pcg64_type;
 
-/* pcg64_cmdxsm cheap multiplier with a 64bit DXSM mixer. This is also called PCG64 variant 2.0.
+/* pcg64_cmdxsm cheap multiplier with a 64bit DXSM mixer.
+   This is also called PCG64 variant 2.0.
  */
+static inline uint64_t pcg_output_cmdxsm(uint64_t high, uint64_t low) {
+  uint64_t hi = high;
+  uint64_t lo = low;
+
+  lo |= 1;
+  hi ^= hi >> 32;
+  hi *= PCG_CHEAP_MULTIPLIER_LOW;
+  hi ^= hi >> 48;
+  hi *= lo;
+  return hi;
+}
+static inline uint64_t pcg_output_dxsm(uint64_t high, uint64_t low) {
+  uint64_t hi = high;
+  uint64_t lo = low;
+
+  lo |= 1;
+  hi ^= hi >> 32;
+  hi *= PCG_DEFAULT_MULTIPLIER_LOW;
+  hi ^= hi >> 48;
+  hi *= lo;
+  return hi;
+}
+static inline void pcg64_cm_step_r(pcg64_random_t *rng) {
+  rng->state = (rng->state * PCG_CHEAP_MULTIPLIER_128) + rng->inc;
+}
+static inline void pcg64_step_r(pcg64_random_t *rng) {
+  rng->state = (rng->state * PCG_DEFAULT_MULTIPLIER_128) + rng->inc;
+}
+static inline void pcg64_cmdxsm_srandom_r(pcg_state_setseq_128* rng,
+                                          pcg128_t initstate, pcg128_t initseq)
+{
+    rng->state = 0U;
+    rng->inc = (initseq << 1u) | 1u;
+    pcg64_cm_step_r(rng);
+    rng->state += initstate;
+    pcg64_cm_step_r(rng);
+}
+
+static void pcg64_cmdxsm_set(void *vstate, unsigned long int seed)
+{
+  pcg64_random_t* rng = (pcg64_random_t*) vstate;
+  // rng_test requires non-random initseq, so we cannot use the pointer
+  pcg64_cmdxsm_srandom_r(rng, seed, 57 /*(intptr_t)&rng*/);
+}
+
+static unsigned long int pcg64_cmdxsm_get(void *vstate)
+{
+  pcg64_random_t* rng = (pcg64_random_t*) vstate;
+  pcg64_cm_step_r(rng);
+  return (unsigned long int)pcg_output_cmdxsm(PCG_HIGH(rng->state), PCG_LOW(rng->state));
+}
+
+static double
+pcg64_cmdxsm_get_double (void *vstate)
+{
+  return TO_DOUBLE(pcg64_cmdxsm_get(vstate));
+}
+
+static const gsl_rng_type pcg64_cmdxsm_type =
+{"pcg64_cmdxsm",                  /* name */
+ RNG64_MAX,			/* RAND_MAX */
+ 0,				/* RAND_MIN */
+ sizeof (pcg64_random_t),
+ &pcg64_cmdxsm_set,
+ &pcg64_cmdxsm_get,
+ &pcg64_cmdxsm_get_double};
+const gsl_rng_type *gsl_rng_pcg64_cmdxsm = &pcg64_cmdxsm_type;
 
 /* pcg64_dxsm with a strong 128bit DXSM mixer.
  */
-//const gsl_rng_type *gsl_rng_pcg64_dxsm = &pcg64_dxsm_type;
-//const gsl_rng_type *gsl_rng_pcg64_cmdxsm = &pcg64_cmdxsm_type;
+static inline void pcg64_dxsm_srandom_r(pcg_state_setseq_128* rng,
+                                      pcg128_t initstate, pcg128_t initseq)
+{
+    rng->state = 0U;
+    rng->inc = (initseq << 1u) | 1u;
+    pcg64_step_r(rng);
+    rng->state += initstate;
+    pcg64_step_r(rng);
+}
+static void pcg64_dxsm_set(void *vstate, unsigned long int seed)
+{
+  pcg64_random_t* rng = (pcg64_random_t*) vstate;
+  // rng_test requires non-random initseq, so we cannot use the pointer
+  pcg64_dxsm_srandom_r(rng, seed, 57 /*(intptr_t)&rng*/);
+}
+
+static unsigned long int pcg64_dxsm_get(void *vstate)
+{
+  pcg64_random_t* rng = (pcg64_random_t*) vstate;
+  pcg64_step_r(rng);
+  return (unsigned long int)pcg_output_dxsm(PCG_HIGH(rng->state), PCG_LOW(rng->state));
+}
+
+static double
+pcg64_dxsm_get_double (void *vstate)
+{
+  return TO_DOUBLE(pcg64_dxsm_get(vstate));
+}
+
+static const gsl_rng_type pcg64_dxsm_type =
+{"pcg64_dxsm",                  /* name */
+ RNG64_MAX,			/* RAND_MAX */
+ 0,				/* RAND_MIN */
+ sizeof (pcg64_random_t),
+ &pcg64_dxsm_set,
+ &pcg64_dxsm_get,
+ &pcg64_dxsm_get_double};
+const gsl_rng_type *gsl_rng_pcg64_dxsm = &pcg64_dxsm_type;
 
 #endif

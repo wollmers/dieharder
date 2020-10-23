@@ -70,8 +70,8 @@
  GSL_VAR const gsl_rng_type *gsl_rng_pcg32;			/* rurban Oct 2020 */
 #if defined(__SIZEOF_INT128__)
  GSL_VAR const gsl_rng_type *gsl_rng_pcg64;			/* rurban Oct 2020 */
- //GSL_VAR const gsl_rng_type *gsl_rng_pcg64_dxsm;		/* rurban Oct 2020 */
- //GSL_VAR const gsl_rng_type *gsl_rng_pcg64_cmdxsm;	       	/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_pcg64_dxsm;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_pcg64_cmdxsm;	       	/* rurban Oct 2020 */
 #endif
  GSL_VAR const gsl_rng_type *gsl_rng_efiix64;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_hc128;			/* rurban Oct 2020 */

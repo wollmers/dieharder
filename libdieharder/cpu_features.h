@@ -20,6 +20,11 @@
 #include <intrin.h>
 #endif
 
+#ifdef __GNUC
+#define ALIGN_GCC_CLANG __attribute__((aligned(16)))
+#else
+#endif
+
 #define DH_EAX 0
 #define DH_EBX 1
 #define DH_ECX 2

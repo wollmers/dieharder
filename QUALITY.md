@@ -28,6 +28,7 @@ _no FAILED, 1 WEAK_
 |xoroshiro128ss_g220_a.out:1    |    258438  |     263123  |
 |xoshiro128ss_g212_a.out:1      |    256337  |     234257  |
 |romutrio_g234_a_Y1.out:1       |    275307  |     224290  |
+|pcg64_cmdxsm_g227_a_Y1.out:1   |    240633  |     238640  |
 |mt64_g241_a_Y1.out:1           |    209086  |     208872  |
 |mt19937_g013_a.out:1           |    118291  |     111515  |
 |ca_g203_a.out:1                |    117518  |      70488  |
@@ -60,6 +61,7 @@ _no FAILED, >1 WEAK_
 |romuquad_g235_a_Y1.out:4       |    277531  |     258264  |
 |pcg32_g224_a.out:5             |    289259  |     290343  |
 |speck-128_g244_a_Y1_r32.out:5  |     97501  |      84899  |
+|pcg64_dxsm_g226_a_Y1.out:7     |    220254  |     221719  |
 |speck-128_g244_a_Y1_r28.out:12 |     97501  |      84899  |
 
 BAD

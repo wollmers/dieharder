@@ -161,8 +161,8 @@ void dieharder_rng_types()
 
 #if defined(__SIZEOF_INT128__)  && !defined(HAVE_32BITLONG)
  ADD_RNG (pcg64);
- //ADD_RNG (pcg64_dxsm);
- //ADD_RNG (pcg64_cmdxsm);
+ ADD_RNG (pcg64_dxsm);
+ ADD_RNG (pcg64_cmdxsm);
 #endif
  i = 228;
 #ifndef HAVE_32BITLONG
