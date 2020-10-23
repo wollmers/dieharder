@@ -21,3 +21,4 @@ pcg32_g224_a.out:5
 speck-128_g244_a_Y1_r32.out:5
 pcg64_dxsm_g226_a_Y1.out:7
 speck-128_g244_a_Y1_r28.out:12
+splitmix64_g247_a_Y1.out:16

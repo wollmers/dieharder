@@ -93,6 +93,7 @@
  GSL_VAR const gsl_rng_type *gsl_rng_chacha;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_sfmt;			/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_aesni;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_splitmix64;	       	/* rurban Oct 2020 */
 
  /*
   * rng global vectors and variables for setup and tests.
@@ -123,10 +124,11 @@ extern gsl_rng *rng;                  /* global gsl random number generator */
 extern int rdrand_capable(void);
 extern int aesni_capable(void);
 
-/* Needed for some seeding */
+/* Needed for some seeding, but also passes BigCrush. */
+/* http://dx.doi.org/10.1145/2714064.2660195 */
 static inline uint64_t splitmix64_next(uint64_t *state64) {
-  uint64_t z = (*state64 += 0x9e3779b97f4a7c15);
-  z = (z ^ (z >> 30)) * 0xbf58476d1ce4e5b9;
-  z = (z ^ (z >> 27)) * 0x94d049bb133111eb;
+  uint64_t z = (*state64 += UINT64_C(0x9e3779b97f4a7c15));
+  z = (z ^ (z >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
+  z = (z ^ (z >> 27)) * UINT64_C(0x94d049bb133111eb);
   return z ^ (z >> 31);
 }

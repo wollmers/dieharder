@@ -109,6 +109,7 @@ libdieharder_la_SOURCES = \
 	rng_pcg.c \
 	rng_rdrand.c \
 	rng_sfmt.c \
+	rng_splitmix64.c \
 	rng_superkiss.c \
 	rng_stdin_input_raw.c \
 	rng_threefish.c \

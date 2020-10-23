@@ -65,6 +65,7 @@ _no FAILED, >1 WEAK_
 |speck-128_g244_a_Y1_r32.out:5  |     97501  |      84899  |
 |pcg64_dxsm_g226_a_Y1.out:7     |    220254  |     221719  |
 |speck-128_g244_a_Y1_r28.out:12 |     97501  |      84899  |
+|splitmix64_g247_a_Y1.out:16    |    301914  |     311439  |
 
 BAD
 ---

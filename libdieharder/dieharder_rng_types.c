@@ -221,6 +221,7 @@ void dieharder_rng_types()
 #else
   i++;
 #endif
+  ADD_RNG (splitmix64);
 
   MYDEBUG(D_TYPES){
     printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
