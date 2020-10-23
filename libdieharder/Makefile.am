@@ -37,10 +37,10 @@ if HAVE_32BITLONG
 else
 64BIT_RNGS = \
 	rng_efiix64.c \
+	rng_mt64.c \
 	rng_romu.c \
 	rng_speck128.c \
 	rng_xoroshiro64bit.c
-#	rng_mt64.c
 endif
 
 # The shell script is the easy way to do this, by far.  But it may not

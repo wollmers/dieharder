@@ -133,6 +133,7 @@ void dieharder_rng_types()
  ADD_RNG (kiss);
  ADD_RNG (superkiss);
 
+ i = 210;
  ADD_RNG (wyrand);
  // 32bit
  ADD_RNG (xoshiro128_pp);
@@ -148,60 +149,51 @@ void dieharder_rng_types()
  ADD_RNG (xoroshiro128_pp);
  ADD_RNG (xoroshiro128_ss);
  ADD_RNG (xoroshiro128_p);
-#else
- i += 6;
 #endif
 
+ i = 222;
  ADD_RNG (jsf);
 #ifndef HAVE_32BITLONG
  ADD_RNG (jsf64);
-#else
- i++;
 #endif
+ i = 224;
  ADD_RNG (pcg32);
 
 #if defined(__SIZEOF_INT128__)  && !defined(HAVE_32BITLONG)
  ADD_RNG (pcg64);
  //ADD_RNG (pcg64_dxsm);
  //ADD_RNG (pcg64_cmdxsm);
- i += 2;
-#else
- i += 3;
 #endif
+ i = 228;
 #ifndef HAVE_32BITLONG
-  ADD_RNG (efiix64);
-  ADD_RNG (hc128);
-#else
-  i += 2;
+ ADD_RNG (efiix64);
+ ADD_RNG (hc128);
 #endif
-  ADD_RNG (lxm);
+ i = 230;
+ ADD_RNG (lxm);
 #ifndef HAVE_32BITLONG
-  ADD_RNG (romutrio);
-  ADD_RNG (romuquad);
-#else
-  i += 2;
+ ADD_RNG (romutrio);
+ ADD_RNG (romuquad);
 #endif
-  //ADD_RNG (threefry2x32);
-  //ADD_RNG (threefry4x32);
-  i += 2;
+ i = 233;
+ //ADD_RNG (threefry2x32);
+ //ADD_RNG (threefry4x32);
 #ifndef HAVE_32BITLONG
-  //ADD_RNG (threefry2x64);
-  //ADD_RNG (threefry4x64);
-#else
-  i += 2;
+ //ADD_RNG (threefry2x64);
+ //ADD_RNG (threefry4x64);
 #endif
-  //ADD_RNG (philox2x32);
-  //ADD_RNG (philox4x32);
-  i += 2;
+ i = 237;
+ //ADD_RNG (philox2x32);
+ //ADD_RNG (philox4x32);
 #ifndef HAVE_32BITLONG
-  //ADD_RNG (philox2x64);
-  //ADD_RNG (philox4x64);
-  //ADD_RNG (mt64);
-#else
-  i += 3;
+ //ADD_RNG (philox2x64);
+ //ADD_RNG (philox4x64);
+ i = 241;
+ ADD_RNG (mt64);
 #endif
 
-  // hardware dependent/optimized:
+ i = 242;
+ // hardware dependent/optimized:
 #ifdef HAVE__RDRAND64_STEP
   if (rdrand_capable()){
     ADD_RNG (rdrand);

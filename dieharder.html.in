@@ -629,10 +629,14 @@ gsl 2.6)</p>
 |   215 xoroshiro64*        |216 xoshiro256++        |217 xoshiro256**        |
 |   218 xoshiro256+         |219 xoroshiro128++      |220 xoroshiro128**      |
 |   221 xoroshiro128+       |222 jsf                 |223 jsf64               |
-|   224 pcg32               |225 pcg64               |228 efiix64             |
-|   229 hc-128              |230 lxm                 |231 romutrio            |
-|   232 romuquad            |237 rdrand              |238 chacha              |
-|   239 speck-128           |240 sfmt                |                        |
+|   224 pcg32               |225 pcg64               |226 pcg64_dxsm          |
+|   227 pcg64_cmdxsm        |228 efiix64             |229 hc-128              |
+|   230 lxm                 |231 romutrio            |232 romuquad            |
+|   233 threefry2x32        |234 threefry4x32        |235 threefry2x64        |
+|   236 threefry4x64        |237 philox2x32          |238 philox4x32          |
+|   239 philox2x64          |240 philox4x64          |241 mt64                |
+|   242 rdrand              |243 chacha              |244 speck-128           |
+|   245 sfmt                |                        |                        |
 #=============================================================================#
 |   400 R_wichmann_hill     |401 R_marsaglia_multic. |402 R_super_duper       |
 |   403 R_mersenne_twister  |404 R_knuth_taocp       |405 R_knuth_taocp2      |
