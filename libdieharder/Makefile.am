@@ -36,6 +36,7 @@ if HAVE_32BITLONG
 64BIT_RNGS =
 else
 64BIT_RNGS = \
+	rng_aesni.c \
 	rng_efiix64.c \
 	rng_mt64.c \
 	rng_romu.c \
@@ -130,7 +131,6 @@ libdieharder_la_SOURCES = \
 
 #       rng_philox.c
 #       rng_threefry.c
-#       rng_aesni.c
 #       rgb_lmn.c
 
 # The program/library may need to know what version it is, define

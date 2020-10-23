@@ -210,8 +210,17 @@ void dieharder_rng_types()
   i++;
 #endif
   ADD_RNG (sfmt);
-  //ADD_RNG (aesni);
+#ifdef HAVE__MM_AESENC_SI128
+  if (aesni_capable()){
+    ADD_RNG (aesni);
+  } else {
+    i++;
+  }
+#elif defined(FORCE_SOFTAES)
+  ADD_RNG (aesni);
+#else
   i++;
+#endif
 
   MYDEBUG(D_TYPES){
     printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);

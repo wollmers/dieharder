@@ -3,6 +3,7 @@
 
 #undef VERSION
 #include "config.h"
+#include <inttypes.h>
 
 // intel intrinsics. _rdrand64_step
 #ifdef HAVE_IMMINTRIN_H
@@ -20,10 +21,12 @@
 #include <intrin.h>
 #endif
 
-#ifdef __GNUC
+#ifdef __GNUC__
 #define ALIGN_GCC_CLANG __attribute__((aligned(16)))
 #else
+#define ALIGN_GCC_CLANG
 #endif
+#define ALIGN_WINDOWS
 
 #define DH_EAX 0
 #define DH_EBX 1
@@ -50,5 +53,38 @@
 extern int is_genuine_intel();
 uint32_t x86_feature_flags(int major);
 #define x86_feature_set(flags, i) ((flags) & (1 << (i)))
+
+/* need bswap_64 */
+
+#if defined(__APPLE__)
+// Mac OS X / Darwin features
+#include <libkern/OSByteOrder.h>
+#define bswap_64(x) OSSwapInt64(x)
+
+#elif defined(__sun) || defined(sun)
+#include <sys/byteorder.h>
+#define bswap_64(x) BSWAP_64(x)
+
+#elif defined(__FreeBSD__)
+#include <sys/endian.h>
+#define bswap_64(x) bswap64(x)
+
+#elif defined(__OpenBSD__)
+#include <sys/types.h>
+#define bswap_64(x) swap64(x)
+
+#elif defined(__NetBSD__)
+
+#include <sys/types.h>
+#include <machine/bswap.h>
+#if defined(__BSWAP_RENAME) && !defined(__bswap_32)
+#define bswap_64(x) bswap64(x)
+#endif
+
+#elif defined (HAVE_BYTESWAP_H)
+
+#include <byteswap.h>
+
+#endif
 
 #endif /* _CPU_FEATURES_H */

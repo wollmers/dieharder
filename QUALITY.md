@@ -1,6 +1,7 @@
 Quality and speed of the tested rng functions
 =============================================
 dieharder v3.31.2beta https://rurban.github.io/dieharder/QUALITY.html
+For PractRand and bigcrush TestU01 results see https://github.com/lemire/testingRNG
 
 `rng_name _g<num> :<num_weak>`
 
@@ -53,6 +54,7 @@ _no FAILED, >1 WEAK_
 |tt800_g056_a.out:3             |    201869  |     192733  |
 |uvag_g204_a.out:3              |    184928  |     168279  |
 |mt19937_1999_g014_a.out:3      |    125415  |     106326  |
+|aesni_g246_a.out:3             |     96292  |     100698  |
 |R_wichmann_hill_g400_a.out:3   |     91092  |     107046  |
 |speck-128_g244_a_Y1_r34.out:3  |     72961  |      71054  |
 |AES_OFB_g205_a.out:3           |     41845  |      43167  |

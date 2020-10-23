@@ -157,11 +157,13 @@ AC_CHECK_HEADERS([cpuid.h       \
                   xmmintrin.h   \
                   emmintrin.h   \
                   tmmintrin.h   \
+                  wmmintrin.h   \
                   x86intrin.h   \
                   xopintrin.h   \
                   arm_neon.h    \
                   mmintrin.h    \
-                  altivec.h
+                  altivec.h     \
+                  byteswap.h
                   ])
 dnl FIXME arm
 CFLAGS="$CFLAGS -march=native"
@@ -185,7 +187,7 @@ if test x"$ac_cv_sizeof_long" = x"8"; then
   ])
  if test x$ac_cv__rdrand64_step = x1; then
   AC_DEFINE([HAVE__RDRAND64_STEP], [1],
-    [Define if __rdrand64_step() is supported.])
+    [Define if _rdrand64_step() is supported.])
  fi
  AC_MSG_CHECKING([for working _rdseed64_step])
  AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
@@ -205,7 +207,7 @@ if test x"$ac_cv_sizeof_long" = x"8"; then
   ])
  if test x$ac_cv__rdseed64_step = x1; then
   AC_DEFINE([HAVE__RDSEED64_STEP], [1],
-    [Define if __rdseed64_step() is supported.])
+    [Define if _rdseed64_step() is supported.])
  fi
 
 else
@@ -229,7 +231,7 @@ else
   ])
  if test x$ac_cv__rdrand32_step = x1; then
     AC_DEFINE([HAVE__RDRAND32_STEP], [1],
-      [Define if __rdrand32_step() is supported.])
+      [Define if _rdrand32_step() is supported.])
  fi
 
  AC_MSG_CHECKING([for working _rdseed32_step])
@@ -250,8 +252,32 @@ else
   ])
   if test x$ac_cv__rdseed32_step = x1; then
     AC_DEFINE([HAVE__RDSEED32_STEP], [1],
-      [Define if __rdseed32_step() is supported.])
+      [Define if _rdseed32_step() is supported.])
   fi
+fi
+
+if test x"$ac_cv_sizeof_long" = x"8"; then
+ AC_MSG_CHECKING([for working _mm_aesenc_si128])
+ AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+  [[
+    #include <wmmintrin.h>
+  ]],
+  [[
+    const __m128i k = _mm_set_epi64x(0UL, 0UL);
+    const __m128i work = k, subkey = k;
+    if (!__mm_aesenc_si128(work, subkey))
+      exit(1);
+  ]])],[
+    ac_cv__mm_aesenc_si128=1
+    AC_MSG_RESULT([yes])
+  ],[
+    ac_cv__mm_aesenc_si128=
+    AC_MSG_RESULT([no])
+  ])
+ if test x$ac_cv__mm_aesenc_si128 = x1; then
+  AC_DEFINE([HAVE__MM_AESENC_SI128], [1],
+    [Define if _mm_aesenc_si128() is supported.])
+ fi
 fi
 
 dnl FIXME GH #1 proper exports, -fno-common -fvisibility=hidden

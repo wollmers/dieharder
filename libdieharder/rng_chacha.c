@@ -43,10 +43,10 @@ int g_can_simd;
 typedef double * aligned_double_ptr ;
 
 struct chacha_state {
-    uint32_t block[16] __attribute__((aligned(16)));
+    uint32_t block[16] ALIGN_GCC_CLANG;
     uint32_t keysetup[8];
     uint64_t ctr[2];
-} __attribute__((aligned(16)));
+} ALIGN_GCC_CLANG;
 
 typedef struct chacha_state chacha_state_t;
 
