@@ -98,6 +98,11 @@
  GSL_VAR const gsl_rng_type *gsl_rng_lehmer64;		       	/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_mitchellmoore;		/* rurban Oct 2020 */
  GSL_VAR const gsl_rng_type *gsl_rng_widynski;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_xorshift32;	       	/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_xorshift32_truncated;	/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_xor128;			/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_xorshift_k4;		/* rurban Oct 2020 */
+ GSL_VAR const gsl_rng_type *gsl_rng_xorshift_k5;		/* rurban Oct 2020 */
 
  /*
   * rng global vectors and variables for setup and tests.

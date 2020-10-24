@@ -229,6 +229,11 @@ void dieharder_rng_types()
 #endif
   ADD_RNG (mitchellmoore);
   ADD_RNG (widynski);
+  ADD_RNG (xorshift32);
+  ADD_RNG (xorshift32_truncated);
+  ADD_RNG (xor128);
+  ADD_RNG (xorshift_k4);
+  ADD_RNG (xorshift_k5);
 
   MYDEBUG(D_TYPES){
     printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
