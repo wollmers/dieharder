@@ -106,6 +106,7 @@ libdieharder_la_SOURCES = \
 	rng_jsf.c \
 	rng_kiss.c \
 	rng_lxm.c \
+	rngs_lemire.c \
 	rng_pcg.c \
 	rng_rdrand.c \
 	rng_sfmt.c \

@@ -222,6 +222,13 @@ void dieharder_rng_types()
   i++;
 #endif
   ADD_RNG (splitmix64);
+#if !defined(HAVE_32BITLONG) && defined(__SIZEOF_INT128__)
+  ADD_RNG (lehmer64);
+#else
+  i++;
+#endif
+  ADD_RNG (mitchellmoore);
+  ADD_RNG (widynski);
 
   MYDEBUG(D_TYPES){
     printf("# startup:  Found %u dieharder rngs.\n",dh_num_dieharder_rngs);
