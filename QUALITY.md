@@ -23,51 +23,54 @@ GOOD
 ----
 _no FAILED, 1 WEAK_
 
-| rng function                  |    ints/sec| doubles/sec |
-|:------------------------------|-----------:|------------:|
-|xoroshiro128+_g221_a.out:1     |    250752  |     257546  |
-|xoroshiro128ss_g220_a.out:1    |    258438  |     263123  |
-|widynski_g250_a_Y1.out:1       |    259127  |     267222  |
-|xoshiro128ss_g212_a.out:1      |    256337  |     234257  |
-|romutrio_g234_a_Y1.out:1       |    275307  |     224290  |
-|pcg64_cmdxsm_g227_a_Y1.out:1   |    240633  |     238640  |
-|mt64_g241_a_Y1.out:1           |    209086  |     208872  |
-|mt19937_g013_a.out:1           |    118291  |     111515  |
-|ca_g203_a.out:1                |    117518  |      70488  |
-|mt19937_1998_g015_a.out:1      |    106327  |     101035  |
-|R_mersenne_twister_g403_a.out:1|     88174  |     121088  |
-|ranlux389_g044_a.out:1         |     10980  |      11295  |
+| rng function                   |    ints/sec| doubles/sec |
+|:-------------------------------|-----------:|------------:|
+|xorshift128plus_g259_a_Y1.out:1 |    290478  |     279884  |
+|xoroshiro128+_g221_a.out:1      |    250752  |     257546  |
+|xoroshiro128ss_g220_a.out:1     |    258438  |     263123  |
+|widynski_g250_a_Y1.out:1        |    259127  |     267222  |
+|xoshiro128ss_g212_a.out:1       |    256337  |     234257  |
+|romutrio_g234_a_Y1.out:1        |    275307  |     224290  |
+|pcg64_cmdxsm_g227_a_Y1.out:1    |    240633  |     238640  |
+|mt64_g241_a_Y1.out:1            |    209086  |     208872  |
+|xorshift1024star_g261_a_Y1.out:1|    165942  |     171794  |
+|mt19937_g013_a.out:1            |    118291  |     111515  |
+|ca_g203_a.out:1                 |    117518  |      70488  |
+|mt19937_1998_g015_a.out:1       |    106327  |     101035  |
+|R_mersenne_twister_g403_a.out:1 |     88174  |     121088  |
+|ranlux389_g044_a.out:1          |     10980  |      11295  |
 
 WEAK
 ----
 _no FAILED, >1 WEAK_
 
-| rng function                  |    ints/sec| doubles/sec |
-|:------------------------------|-----------:|------------:|
-|pcg64_g225_a.out:2             |    237129  |     227795  |
-|taus_g052_a.out:2              |    215197  |     226952  |
-|taus2_g053_a.out:2             |    214293  |     226557  |
-|kiss_g208_a.out:2              |    193869  |     188893  |
-|hc-128_g232_a_Y1.out:2         |    153583  |      99089  |
-|Threefish_OFB_g206_a.out:2     |     92264  |      87436  |
-|chacha_g243_a_Y1.out:2         |     80999  |      51838  |
-|ranlxd2_g046_a.out:2           |      7344  |       7381  |
-|tt800_g056_a.out:3             |    201869  |     192733  |
-|uvag_g204_a.out:3              |    184928  |     168279  |
-|mt19937_1999_g014_a.out:3      |    125415  |     106326  |
-|aesni_g246_a.out:3             |     96292  |     100698  |
-|R_wichmann_hill_g400_a.out:3   |     91092  |     107046  |
-|speck-128_g244_a_Y1_r34.out:3  |     72961  |      71054  |
-|AES_OFB_g205_a.out:3           |     41845  |      43167  |
-|ranlxd1_g045_a.out:3           |     12999  |      13124  |
-|jsf_g222_a.out:4               |    268269  |     267802  |
-|romuquad_g235_a_Y1.out:4       |    277531  |     258264  |
-|pcg32_g224_a.out:5             |    289259  |     290343  |
-|speck-128_g244_a_Y1_r32.out:5  |     97501  |      84899  |
-|mitchellmoore_g249_a_Y1.out:6  |    156484  |     159245  |
-|pcg64_dxsm_g226_a_Y1.out:7     |    220254  |     221719  |
-|speck-128_g244_a_Y1_r28.out:12 |     97501  |      84899  |
-|splitmix64_g247_a_Y1.out:16    |    301914  |     311439  |
+| rng function                     |    ints/sec| doubles/sec |
+|:---------------------------------|-----------:|------------:|
+|pcg64_g225_a.out:2                |    237129  |     227795  |
+|taus_g052_a.out:2                 |    215197  |     226952  |
+|taus2_g053_a.out:2                |    214293  |     226557  |
+|kiss_g208_a.out:2                 |    193869  |     188893  |
+|hc-128_g232_a_Y1.out:2            |    153583  |      99089  |
+|Threefish_OFB_g206_a.out:2        |     92264  |      87436  |
+|chacha_g243_a_Y1.out:2            |     80999  |      51838  |
+|ranlxd2_g046_a.out:2              |      7344  |       7381  |
+|tt800_g056_a.out:3                |    201869  |     192733  |
+|uvag_g204_a.out:3                 |    184928  |     168279  |
+|mt19937_1999_g014_a.out:3         |    125415  |     106326  |
+|aesni_g246_a.out:3                |     96292  |     100698  |
+|R_wichmann_hill_g400_a.out:3      |     91092  |     107046  |
+|speck-128_g244_a_Y1_r34.out:3     |     72961  |      71054  |
+|AES_OFB_g205_a.out:3              |     41845  |      43167  |
+|ranlxd1_g045_a.out:3              |     12999  |      13124  |
+|jsf_g222_a.out:4                  |    268269  |     267802  |
+|romuquad_g235_a_Y1.out:4          |    277531  |     258264  |
+|pcg32_g224_a.out:5                |    289259  |     290343  |
+|speck-128_g244_a_Y1_r32.out:5     |     97501  |      84899  |
+|mitchellmoore_g249_a_Y1.out:6     |    156484  |     159245  |
+|pcg64_dxsm_g226_a_Y1.out:7        |    220254  |     221719  |
+|speck-128_g244_a_Y1_r28.out:12    |     97501  |      84899  |
+|splitmix64_g247_a_Y1.out:16       |    301914  |     311439  |
+|xorshift1024plus_g260_a_Y1.out:236|    248317  |     244140  |
 
 BAD
 ---
@@ -117,9 +120,12 @@ _some FAILED, sorted from better to worst.
 |R_marsaglia_multic._g401_a.out:5:4      |    134321  |     164498  |
 |random64-glibc2_g033_a.out:5:8          |    266141  |     242653  |
 |uni_g057_a.out:6:2                      |    253646  |     243439  |
+|xorshift-add_g256_a_Y1.out:6:3          |    243765  |     117423  |
 |ran0_g017_a.out:6:3                     |    135058  |     139091  |
+|xorshift7_g257_a_Y1.out:6:4             |    205418  |     101648  |
 |minstd_g011_a.out:6:5                   |    141091  |     145448  |
 |random64-bsd_g032_a.out:6:6             |    250708  |     257009  |
+|xorshift-k5_g255_a_Y1.out:8:3           |    245742  |     246645  |
 |random64-libc5_g034_a.out:8:4           |    255905  |     249712  |
 |rdrand_g242_a-AMDBroken.out:15:19       |        77  |         76  |
 
@@ -127,21 +133,26 @@ VERY BAD
 --------
 _>20 FAILED_
 
-| rng function                    |    ints/sec| doubles/sec |
-|:--------------------------------|-----------:|------------:|
-|random32-libc5_g031_a.out:42:3   |    264068  |     260057  |
-|random32-glibc2_g030_a.out:42:7  |    190407  |     255996  |
-|random32-bsd_g029_a.out:42:8     |    226983  |     239257  |
-|jsf64_g223_a.out:43:1            |    266035  |     119906  |
-|ran3_g020_a.out:46:4             |    207947  |     176844  |
-|vax_g059_a.out:52:8              |    251016  |     281984  |
-|rand_g021_a.out:55:6             |    248040  |     263060  |
-|random8-bsd_g035_a.out:55:7      |    272264  |     267902  |
-|random8-glibc2_g036_a.out:57:3   |    206134  |     223593  |
-|random8-libc5_g037_a.out:57:2    |    243167  |     204507  |
-|coveyou_g002_a.out:59:4          |    214472  |     180995  |
-|transputer_g055_a.out:61:2       |    268773  |     304812  |
-|waterman14_g060_a.out:62:1       |    297610  |     315666  |
-|borosh13_g000_a.out:62:4         |    296709  |     315268  |
-|randu_g041_a.out:68:5            |    224744  |     257824  |
-|slatec_g051_a.out:75:4           |    158755  |     165730  |
+| rng function                          |    ints/sec| doubles/sec |
+|:--------------------------------------|-----------:|------------:|
+|xorshift-k4_g254_a_Y1.out:42:0         |    279665  |     261889  |
+|xor128_g253_a_Y1.out:42:1              |    281698  |     286574  |
+|xorshift32-trunc_g252_a_Y1.out:42:1    |    240482  |     231443  |
+|xor4096_g258_a_Y1.out:42:1             |    195308  |     200569  |
+|random32-libc5_g031_a.out:42:3         |    264068  |     260057  |
+|random32-glibc2_g030_a.out:42:7        |    190407  |     255996  |
+|random32-bsd_g029_a.out:42:8           |    226983  |     239257  |
+|jsf64_g223_a.out:43:1                  |    266035  |     119906  |
+|xorshift32_g251_a_Y1.out:44:5          |    248028  |     248040  |
+|ran3_g020_a.out:46:4                   |    207947  |     176844  |
+|vax_g059_a.out:52:8                    |    251016  |     281984  |
+|rand_g021_a.out:55:6                   |    248040  |     263060  |
+|random8-bsd_g035_a.out:55:7            |    272264  |     267902  |
+|random8-glibc2_g036_a.out:57:3         |    206134  |     223593  |
+|random8-libc5_g037_a.out:57:2          |    243167  |     204507  |
+|coveyou_g002_a.out:59:4                |    214472  |     180995  |
+|transputer_g055_a.out:61:2             |    268773  |     304812  |
+|waterman14_g060_a.out:62:1             |    297610  |     315666  |
+|borosh13_g000_a.out:62:4               |    296709  |     315268  |
+|randu_g041_a.out:68:5                  |    224744  |     257824  |
+|slatec_g051_a.out:75:4                 |    158755  |     165730  |

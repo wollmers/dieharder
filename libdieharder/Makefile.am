@@ -116,7 +116,7 @@ libdieharder_la_SOURCES = \
 	rng_threefish.c \
 	rng_uvag.c \
 	rng_wyrand.c \
-	rng_xorshift.c \
+	rngs_xorshift.c \
 	rng_xoshiro32bit.c \
 	$(64BIT_RNGS) \
 	rng_XOR.c \
