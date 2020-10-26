@@ -51,13 +51,17 @@ _no FAILED, >1 WEAK_
 |taus2_g053_a.out:2                |    214293  |     226557  |
 |kiss_g208_a.out:2                 |    193869  |     188893  |
 |hc-128_g232_a_Y1.out:2            |    153583  |      99089  |
+|philox2x32_g237_a_Y1.out:2        |    125565  |      69030  |
 |Threefish_OFB_g206_a.out:2        |     92264  |      87436  |
 |chacha_g243_a_Y1.out:2            |     80999  |      51838  |
 |ranlxd2_g046_a.out:2              |      7344  |       7381  |
 |tt800_g056_a.out:3                |    201869  |     192733  |
 |uvag_g204_a.out:3                 |    184928  |     168279  |
+|philox2x64_g239_a_Y1.out:3        |    131634  |     114825  |
 |mt19937_1999_g014_a.out:3         |    125415  |     106326  |
+|philox4x32_g238_a_Y1.out:3        |     98461  |      48821  |
 |aesni_g246_a.out:3                |     96292  |     100698  |
+|philox4x64_g240_a_Y1.out:3        |     95681  |      95092  |
 |R_wichmann_hill_g400_a.out:3      |     91092  |     107046  |
 |speck-128_g244_a_Y1_r34.out:3     |     72961  |      71054  |
 |threefry4x32_g234_a_Y1.out:3      |     70471  |      36049  |
@@ -69,7 +73,6 @@ _no FAILED, >1 WEAK_
 |jsf_g222_a.out:4                  |    268269  |     267802  |
 |romuquad_g235_a_Y1.out:4          |    277531  |     258264  |
 |pcg32_g224_a.out:5                |    289259  |     290343  |
-|philox2x32_g237_a_Y1.out:5        |    106533  |      68454  |
 |speck-128_g244_a_Y1_r32.out:5     |     97501  |      84899  |
 |mitchellmoore_g249_a_Y1.out:6     |    156484  |     159245  |
 |pcg64_dxsm_g226_a_Y1.out:7        |    220254  |     221719  |
@@ -98,7 +101,6 @@ _some FAILED, sorted from better to worst.
 |knuthran2_g008_a.out:1:3                |     32190  |      33162  |
 |random256-glibc2_g027_a.out:1:5         |    249862  |     243048  |
 |random256-bsd_g026_a.out:1:6            |    266354  |     257891  |
-|philox4x32_g238_a_Y1.out:1:7            |     97533  |      48815  |
 |R_knuth_taocp_g404_a.out:1:7            |     66739  |      76904  |
 |lehmer64_g248_a_Y1.out:1:8              |    286631  |     279571  |
 |superkiss_g209_a.out:2:1                |    171833  |     160053  |

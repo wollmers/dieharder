@@ -34,7 +34,8 @@ void run_all_tests()
   * No special ntuple tests in diehard
   */
  for(dtest_num=0; (unsigned)dtest_num < dh_num_diehard_tests; dtest_num++){
-   if(dh_test_types[dtest_num]){
+   // skip the "Do not use" diehard_sums test, rgb_lagged_sum is much better
+   if(dh_test_types[dtest_num] && dtest_num != 14){
      execute_test(dtest_num);
    }
  }
