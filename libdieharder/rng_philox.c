@@ -363,6 +363,19 @@ static inline philox##N##x##W##_key_t philox##N##x##W##keyinit(philox##N##x##W##
 static inline philox##N##x##W##_ctr_t philox##N##x##W##_R(unsigned int R, philox##N##x##W##_ctr_t ctr, philox##N##x##W##_key_t key); \
 static inline philox##N##x##W##_ctr_t philox##N##x##W##_R(unsigned int R, philox##N##x##W##_ctr_t ctr, philox##N##x##W##_key_t key) { \
     R123_ASSERT(R<=16);                                                 \
+    if(R==10){                                                          \
+                                            ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); \
+      return ctr;                                                       \
+    }                                                                   \
     if(R>0){                                       ctr = _philox##N##x##W##round(ctr, key); } \
     if(R>1){ key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); } \
     if(R>2){ key = _philox##N##x##W##bumpkey(key); ctr = _philox##N##x##W##round(ctr, key); } \
@@ -541,7 +554,7 @@ _philoxNxW_advance_h_tpl(4, 64)
 /* TODO: removed once the old method is deprecated */
 #define _philoxNxW_advance_tpl(N, W)                                         \
 void philox##N##x##W##_advance(philox_all_t *state, uint##W##_t *step, int use_carry) {   \
-  /* step has N+1 elements */                                                             \
+  /* step has N elements */                                                               \
   int i, next_buffer_pos;                                                                 \
   uint##W##_t last, carry, rem, adj_step;                                                 \
   philox##N##x##W##_ctr_t ct;                                                             \
@@ -555,7 +568,8 @@ void philox##N##x##W##_advance(philox_all_t *state, uint##W##_t *step, int use_c
       /* Add in the lower bits from the next step size */                                 \
       /* The N/2 is really log2(N) but ok here since N is 2 or 4  */                      \
       /* rurban: Note that the original had an overflow here */                           \
-      adj_step += (step[(i + 1) % N]) << (W - (N / 2));                                   \
+      if (i + 1 < N)                                                                      \
+        adj_step += (step[i + 1] % N) << (W - (N / 2));                                   \
       last = state->state.state##N##x##W.ctr.v[i];                                        \
       state->state.state##N##x##W.ctr.v[i] += adj_step + carry;                           \
       carry = (last > state->state.state##N##x##W.ctr.v[i] ||                             \
@@ -595,6 +609,8 @@ static void philox##N##x##W##_set(void *vstate, unsigned long int seed) \
   philox_all_t* state = (philox_all_t*) vstate;                         \
   uint##W##_t steps[N];                                                 \
   steps[0] = (uint##W##_t)seed;                                         \
+  for (unsigned i = i; i < N; i++)                                      \
+    steps[i] = 0;                                                       \
   philox##N##x##W##_advance(state, steps, 1);                           \
 }                                                                       \
 static unsigned long int philox##N##x##W##_get(void *vstate)            \

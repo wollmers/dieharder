@@ -248,6 +248,44 @@ threefry2x##W##_ctr_t threefry2x##W##_R(unsigned int Nrounds,           \
     /* Insert initial key before round 0 */                             \
     X.v[0] += ks[0]; X.v[1] += ks[1];                                   \
                                                                         \
+    if(Nrounds==20){                                                    \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_0_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_1_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_2_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_3_0); X.v[1] ^= X.v[0]; \
+        /* InjectKey(r=1) */                                            \
+        X.v[0] += ks[1]; X.v[1] += ks[2];                               \
+        X.v[1] += 1;     /* X.v[2-1] += r  */                           \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_4_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_5_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_6_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_7_0); X.v[1] ^= X.v[0]; \
+        /* InjectKey(r=2) */                                            \
+        X.v[0] += ks[2]; X.v[1] += ks[0];                               \
+        X.v[1] += 2;                                                    \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_0_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_1_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_2_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_3_0); X.v[1] ^= X.v[0]; \
+        /* InjectKey(r=3) */                                            \
+        X.v[0] += ks[0]; X.v[1] += ks[1];                               \
+        X.v[1] += 3;                                                    \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_4_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_5_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_6_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_7_0); X.v[1] ^= X.v[0]; \
+        /* InjectKey(r=4) */                                            \
+        X.v[0] += ks[1]; X.v[1] += ks[2];                               \
+        X.v[1] += 4;                                                    \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_0_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_1_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_2_0); X.v[1] ^= X.v[0]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_3_0); X.v[1] ^= X.v[0]; \
+        /* InjectKey(r=5) */                                            \
+        X.v[0] += ks[2]; X.v[1] += ks[0];                               \
+        X.v[1] += 5;                                                    \
+        return X;                                                       \
+    }                                                                   \
     if(Nrounds>0){  X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_0_0); X.v[1] ^= X.v[0]; } \
     if(Nrounds>1){  X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_1_0); X.v[1] ^= X.v[0]; } \
     if(Nrounds>2){  X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_2_0); X.v[1] ^= X.v[0]; } \
@@ -293,6 +331,7 @@ threefry2x##W##_ctr_t threefry2x##W##_R(unsigned int Nrounds,           \
         X.v[0] += ks[2]; X.v[1] += ks[0];                               \
         X.v[1] += 5;                                                    \
     }                                                                   \
+                                                                        \
     if(Nrounds>20){  X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_4_0); X.v[1] ^= X.v[0]; } \
     if(Nrounds>21){  X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_5_0); X.v[1] ^= X.v[0]; } \
     if(Nrounds>22){  X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x2_6_0); X.v[1] ^= X.v[0]; } \
@@ -353,7 +392,68 @@ threefry2x##W##_ctr_t threefry2x##W(threefry2x##W##_ctr_t in, threefry2x##W##_ke
     /* Insert initial key before round 0 */                             \
     X.v[0] += ks[0]; X.v[1] += ks[1]; X.v[2] += ks[2]; X.v[3] += ks[3]; \
                                                                         \
-    if(Nrounds>0){                                                      \
+    if(Nrounds==20){                                                    \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_0_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_0_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_1_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_1_1); X.v[1] ^= X.v[2]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_2_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_2_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_3_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_3_1); X.v[1] ^= X.v[2]; \
+        /* InjectKey(r=1) */                                            \
+        X.v[0] += ks[1]; X.v[1] += ks[2]; X.v[2] += ks[3]; X.v[3] += ks[4]; \
+        X.v[4-1] += 1;     /* X.v[WCNT4-1] += r  */                     \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_4_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_4_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_4_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_4_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_5_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_5_1); X.v[1] ^= X.v[2]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_6_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_6_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_7_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_7_1); X.v[1] ^= X.v[2]; \
+        /* InjectKey(r=2) */                                            \
+        X.v[0] += ks[2]; X.v[1] += ks[3]; X.v[2] += ks[4]; X.v[3] += ks[0]; \
+        X.v[4-1] += 2;     /* X.v[WCNT4-1] += r  */                     \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_0_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_0_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_1_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_1_1); X.v[1] ^= X.v[2]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_2_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_2_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_3_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_3_1); X.v[1] ^= X.v[2]; \
+        /* InjectKey(r=3) */                                            \
+        X.v[0] += ks[3]; X.v[1] += ks[4]; X.v[2] += ks[0]; X.v[3] += ks[1]; \
+        X.v[4-1] += 3;     /* X.v[WCNT4-1] += r  */                     \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_4_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_4_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_5_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_5_1); X.v[1] ^= X.v[2]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_6_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_6_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_7_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_7_1); X.v[1] ^= X.v[2]; \
+        /* InjectKey(r=1) */                                            \
+        X.v[0] += ks[4]; X.v[1] += ks[0]; X.v[2] += ks[1]; X.v[3] += ks[2]; \
+        X.v[4-1] += 4;     /* X.v[WCNT4-1] += r  */                     \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_0_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_0_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_1_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_1_1); X.v[1] ^= X.v[2]; \
+        X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_2_0); X.v[1] ^= X.v[0]; \
+        X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_2_1); X.v[3] ^= X.v[2]; \
+        X.v[0] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_3_0); X.v[3] ^= X.v[0]; \
+        X.v[2] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_3_1); X.v[1] ^= X.v[2]; \
+        /* InjectKey(r=1) */                                            \
+        X.v[0] += ks[0]; X.v[1] += ks[1]; X.v[2] += ks[2]; X.v[3] += ks[3]; \
+        X.v[4-1] += 5;     /* X.v[WCNT4-1] += r  */                     \
+        return X;                                                       \
+    }                                                                   \
+                                                                        \
+    if(Nrounds>0){ /* The default */                                    \
         X.v[0] += X.v[1]; X.v[1] = RotL_##W(X.v[1],R_##W##x4_0_0); X.v[1] ^= X.v[0]; \
         X.v[2] += X.v[3]; X.v[3] = RotL_##W(X.v[3],R_##W##x4_0_1); X.v[3] ^= X.v[2]; \
     }                                                                   \
@@ -896,10 +996,10 @@ _threefryNx64_next_double_tpl(4)
 /* TODO: removed once the old method is deprecated */
 #define _threefryNxW_advance_tpl(N, W)                                         \
 static void threefry##N##x##W##_advance(threefry_all_t *state, uint##W##_t *step, int use_carry) {   \
-  /* step has N+1 elements */                                                             \
+  /* step has N elements */                                                               \
   int i, next_buffer_pos;                                                                 \
   uint##W##_t last, carry, rem, adj_step;                                                 \
-  threefry##N##x##W##_ctr_t ct;                                                             \
+  threefry##N##x##W##_ctr_t ct;                                                           \
   rem = step[0] % N;                                                                      \
   next_buffer_pos = state->buffer_pos + rem;                                              \
   carry = (((state->buffer_pos == N) && (rem==0)) || (next_buffer_pos >= N && (rem > 0))) \
@@ -910,7 +1010,8 @@ static void threefry##N##x##W##_advance(threefry_all_t *state, uint##W##_t *step
       /* Add in the lower bits from the next step size */                                 \
       /* The N/2 is really log2(N) but ok here since N is 2 or 4  */                      \
       /* rurban: Note that the original had an overflow here */                           \
-      adj_step += (step[(i + 1) % N]) << (W - (N / 2));                                   \
+      if (i + 1 < N)                                                                      \
+        adj_step += (step[i + 1] % N) << (W - (N / 2));                                   \
       last = state->state.state##N##x##W.ctr.v[i];                                        \
       state->state.state##N##x##W.ctr.v[i] += adj_step + carry;                           \
       carry = (last > state->state.state##N##x##W.ctr.v[i] ||                             \
@@ -936,6 +1037,8 @@ static void threefry##N##x##W##_set(void *vstate, unsigned long int seed) \
   threefry_all_t *state = (threefry_all_t*) vstate;                     \
   uint##W##_t steps[N];                                                 \
   steps[0] = (uint##W##_t)seed;                                         \
+  for (unsigned i = i; i < N; i++)                                      \
+    steps[i] = 0;                                                       \
   threefry##N##x##W##_advance(state, steps, 1);                         \
 }                                                                       \
 static unsigned long int threefry##N##x##W##_get(void *vstate)          \
